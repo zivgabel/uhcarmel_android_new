@@ -294,6 +294,12 @@ public class MainActivity extends AppCompatActivity {
                 createIntent(ShabatListActivity.class);
             }
         });
+        mButtonWarehouseAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createIntent(OrderListActivity.class);
+            }
+        });
         mButtonSendMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

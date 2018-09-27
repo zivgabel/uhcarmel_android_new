@@ -68,6 +68,10 @@
     <string name="send_location_question">שלח את המיקום</string>
     <string name="action_send_my_location">שלח את המיקום שלך</string>
     <string name="my_location">המיקום שלי</string>
+    <string name="title_activity_order_list">הזמנות פתוחות</string>
+    <string name="title_activity_order_detail">פרטי הזמנה</string>
+    <string name="order_detail_from_user">הוזמן על ידי</string>
+    <string name="order_detail_from_branch">הוזמן עבור סניף</string>
 
 
 </resources>
