@@ -1,0 +1,172 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ShabatRegisterActivity"
+    tools:showIn="@layout/activity_shabat_register">
+
+    <TableRow>
+
+        <Switch
+            android:id="@+id/shabat_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/shabat_register_switch_text"
+            android:textOff="@string/shabat_registered_off"
+            android:textOn="@string/shabat_registered_on" />
+    </TableRow>
+
+    <TableRow android:orientation="horizontal">
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_weight="2"
+            android:text="@string/shabat_spiner_tv_text" />
+
+        <Spinner
+            android:id="@+id/shabat_cities_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_weight="6" />
+    </TableRow>
+
+    <TableRow android:orientation="horizontal">
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_weight="2"
+            android:text="@string/shabat_spiner_tv_address" />
+
+        <EditText
+            android:inputType="text"
+            android:id="@+id/shabat_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_weight="6" />
+    </TableRow>
+
+    <TableRow android:orientation="horizontal">
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_weight="2"
+            android:text="@string/shabat_spiner_tv_comment" />
+
+        <EditText
+            android:inputType="text"
+            android:id="@+id/shabat_comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_weight="6"
+            android:tooltipText="asasassa" />
+    </TableRow>
+
+    <TableRow
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="4"
+            android:background="@android:color/holo_orange_light" />
+    </TableRow>
+
+    <TableRow
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:text="@string/shabat_user_deatils_label"
+            android:textAppearance="@android:style/TextAppearance.Material.Large" />
+    </TableRow>
+
+    <TableRow
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="4"
+            android:background="@android:color/holo_orange_light" />
+    </TableRow>
+
+    <TableRow android:orientation="horizontal">
+
+        <TextView
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:text="@string/shabat_firstname_label"
+            android:textAlignment="textStart" />
+
+        <TextView
+            android:id="@+id/shabat_firstname_text"
+            android:textAlignment="textStart" />
+    </TableRow>
+
+    <TableRow
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="@string/shabat_lastname_label"
+            android:textAlignment="textStart" />
+
+        <TextView
+            android:id="@+id/shabat_lasttname_text"
+            android:textAlignment="textStart" />
+    </TableRow>
+
+    <TableRow
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:text="@string/shabat_mirs_label" />
+
+        <TextView
+            android:id="@+id/shabat_mirs_text"
+            android:textAlignment="textStart" />
+
+
+    </TableRow>
+
+</TableLayout>

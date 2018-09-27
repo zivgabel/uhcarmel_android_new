@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:layoutDirection="rtl"
+    android:textDirection="rtl">
+    <TableRow>
+
+        <TextView
+            android:id="@+id/shabat_list_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:textAlignment="textStart"
+            android:textDirection="rtl" />
+
+        <TextView
+            android:id="@+id/shabat_list_item_mirs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:textAlignment="textStart"
+            android:textDirection="rtl" />
+
+        <TextView
+            android:id="@+id/shabat_list_item_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:textAlignment="textStart"
+            android:textDirection="rtl" />
+
+        <TextView
+            android:id="@+id/shabat_list_item_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:textAlignment="textStart" />
+
+        <TextView
+            android:id="@+id/shabat_list_item_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:textAlignment="textStart" />
+    </TableRow>
+</TableLayout>

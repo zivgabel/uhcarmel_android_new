@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="new_order_branches">
+        <item>חיפה</item>
+        <item>קרית אתא</item>
+    </string-array>
+
+</resources>
