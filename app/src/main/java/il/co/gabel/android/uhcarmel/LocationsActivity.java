@@ -2,24 +2,22 @@ package il.co.gabel.android.uhcarmel;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.SearchView;
 
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,24 +26,20 @@ import il.co.gabel.android.uhcarmel.locations.Location;
 import il.co.gabel.android.uhcarmel.locations.LocationsAdapter;
 
 public class LocationsActivity extends AppCompatActivity {
-
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = LocationsActivity.class.getSimpleName();
 
     private RecyclerView recyclerView;
     private SearchView mSearchView;
     private LocationsAdapter adapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_locations);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recyclerView = findViewById(R.id.locations_recycle_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
@@ -87,7 +81,6 @@ public class LocationsActivity extends AppCompatActivity {
         databaseReference.addChildEventListener(listener);
 
 
-
     }
 
     @Override
@@ -113,4 +106,6 @@ public class LocationsActivity extends AppCompatActivity {
         });
         return true;
     }
+
+
 }

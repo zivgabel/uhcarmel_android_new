@@ -27,9 +27,7 @@ public class OrdersSubscribeService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.e(TAG, "From: " + remoteMessage.getFrom());
         if(remoteMessage.getFrom().endsWith(getApplicationContext().getString(R.string.new_order_topic))){
-            // TODO
-            // change to orderl list activity after creation
-            sendIntent = new Intent(this, MainActivity.class);
+            sendIntent = new Intent(this, OrderListActivity.class);
             channelId="newOrders";
         } else {
             sendIntent = new Intent(this, MainActivity.class);

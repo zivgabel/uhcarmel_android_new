@@ -6,7 +6,8 @@
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ShabatRegisterActivity"
-    tools:showIn="@layout/activity_shabat_register">
+    tools:showIn="@layout/activity_shabat_register"
+    android:layoutDirection="rtl">
 
     <TableRow>
 

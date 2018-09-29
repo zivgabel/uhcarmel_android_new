@@ -1,5 +1,7 @@
 package il.co.gabel.android.uhcarmel;
 
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +19,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import il.co.gabel.android.uhcarmel.warehouse.ConfirmOrderDeleteDialogFragmnet;
 import il.co.gabel.android.uhcarmel.warehouse.Item;
 import il.co.gabel.android.uhcarmel.warehouse.Order;
 import il.co.gabel.android.uhcarmel.warehouse.OrderListAdapter;
@@ -28,10 +31,11 @@ import il.co.gabel.android.uhcarmel.warehouse.OrderListAdapter;
  * item details are presented side-by-side with a list of items
  * in a {@link OrderListActivity}.
  */
-public class OrderDetailActivity extends AppCompatActivity {
+public class OrderDetailActivity extends AppCompatActivity implements ConfirmOrderDeleteDialogFragmnet.NoticeDialogListener{
     public static final String ARG_ITEM_ID = "item_id";
     private Order order;
     private static final String TAG=OrderDetailActivity.class.getCanonicalName();
+    private ConfirmOrderDeleteDialogFragmnet confirmOrderDeleteDialogFragmnet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +69,9 @@ public class OrderDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(order!=null){
-                    DatabaseReference reference = Utils.getFBDBReference(getApplicationContext()).child("warehouse").child("orders");
-                    DatabaseReference completed_reference = Utils.getFBDBReference(getApplicationContext()).child("warehouse").child("completed_orders");
-                    reference.child(order.getFb_key()).removeValue();
-                    completed_reference.push().setValue(order);
-                    onBackPressed();
+                    confirmOrderDeleteDialogFragmnet = new ConfirmOrderDeleteDialogFragmnet();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    confirmOrderDeleteDialogFragmnet.show(fragmentManager,"DeleteOrderDialogFragment");
                 }
             }
         });
@@ -96,5 +98,24 @@ public class OrderDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        DatabaseReference reference = Utils.getFBDBReference(getApplicationContext()).child("warehouse").child("orders");
+        DatabaseReference completed_reference = Utils.getFBDBReference(getApplicationContext()).child("warehouse").child("completed_orders");
+        reference.child(order.getFb_key()).removeValue();
+        completed_reference.push().setValue(order);
+        String prefix=getString(R.string.new_order_user_topic_prefix);
+        String mirs = String.valueOf(order.getMirs());
+        String msg = getString(R.string.new_order__deleted_notif_body);
+        Utils.sendNotification(prefix+mirs,msg);
+        confirmOrderDeleteDialogFragmnet.dismiss();
+        onBackPressed();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        confirmOrderDeleteDialogFragmnet.dismiss();
     }
 }

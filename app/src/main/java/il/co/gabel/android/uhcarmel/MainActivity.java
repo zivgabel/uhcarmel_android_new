@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG=MainActivity.class.getSimpleName();
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     private static final int RC_SIGN_IN = 1;
+    private static final String CASE_REPORT_URL = "https://www.tfaforms.com/4645989";
 
     private Button mButtonCall1221;
     private Button mButtonSendMyLocation;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mButtonNewOrder;
     private Button mButtonWarehouseAdmin;
     private Button mBbuttonShabatAdmin;
+    private Button mButtonReportCase;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
@@ -247,10 +249,14 @@ public class MainActivity extends AppCompatActivity {
             mButtonNewOrder.setVisibility(View.GONE);
             mButtonShabatRegister.setVisibility(View.GONE);
             mButtonWarehouseAdmin.setVisibility(View.GONE);
+            mButtonReportCase.setVisibility(View.GONE);
+            mButtonEmsPocket.setVisibility(View.GONE);
             return;
         }
+        mButtonReportCase.setVisibility(View.VISIBLE);
         mButtonNewOrder.setVisibility(View.VISIBLE);
         mButtonShabatRegister.setVisibility(View.VISIBLE);
+        mButtonEmsPocket.setVisibility(View.VISIBLE);
         if(user.getWh_admin()){
             mButtonWarehouseAdmin.setVisibility(View.VISIBLE);
         }
@@ -261,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setButtons(){
-
+        mButtonReportCase = findViewById(R.id.button_report_case);
         mButtonCall1221 = findViewById(R.id.button_call_1221);
         mButtonSendMyLocation = findViewById(R.id.button_send_my_location);
         mButtonLocations = findViewById(R.id.button_locations);
@@ -300,6 +306,12 @@ public class MainActivity extends AppCompatActivity {
                 createIntent(OrderListActivity.class);
             }
         });
+        mButtonEmsPocket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createIntent(PocketPDFActivity.class);
+            }
+        });
         mButtonSendMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -312,6 +324,15 @@ public class MainActivity extends AppCompatActivity {
                 String phone = getString(R.string.united_phone_number);
                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
                 startActivity(intent);
+            }
+        });
+
+        mButtonReportCase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(CASE_REPORT_URL));
+                startActivity(i);
             }
         });
 

@@ -8,4 +8,5 @@
     <color name="secondaryDarkColor">#0069c0</color>
     <color name="primaryTextColor">#212121</color>
     <color name="secondaryTextColor">#000000</color>
+    <color name="primaryTextColorLight">#ffffff</color>
 </resources>

@@ -72,6 +72,12 @@
     <string name="title_activity_order_detail">פרטי הזמנה</string>
     <string name="order_detail_from_user">הוזמן על ידי</string>
     <string name="order_detail_from_branch">הוזמן עבור סניף</string>
-
-
+    <string name="new_order__deleted_notif_body">ההזמנה מחכה לך</string>
+    <string name="previous">הקודם</string>
+    <string name="next">הבא</string>
+    <string name="app_name_with_index">פנקס כיס לחובש (%1$d/%2$d)</string>
+    <string name="title_activity_pocket_pdf">פנקס כיס לחובש</string>
+    <string name="new_order_user_topic_prefix">orders-production-</string>
+    <string name="title_activity_locations2">מיקומים</string>
+    <string name="button_report_case_label">תיעוד מקרים</string>
 </resources>

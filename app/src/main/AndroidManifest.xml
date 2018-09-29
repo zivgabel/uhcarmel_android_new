@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="il.co.gabel.android.uhcarmel">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -7,11 +9,12 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_foreground"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_foreground"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup">
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -20,11 +23,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".LocationsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="il.co.gabel.android.uhcarmel.MainActivity" />
         </activity>
         <activity
             android:name=".NewOrderActivity"
@@ -36,10 +34,11 @@
                 android:value="il.co.gabel.android.uhcarmel.MainActivity" />
         </activity>
 
-        <service
-            android:name=".OrdersSubscribeService"
-            android:enabled="true"
-            android:exported="false" />
+        <service android:name=".OrdersSubscribeService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <activity
             android:name=".ShabatRegisterActivity"
@@ -76,6 +75,24 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="il.co.gabel.android.uhcarmel.OrderListActivity" />
+        </activity>
+        <activity
+            android:name=".PocketPDFActivity"
+            android:label="@string/title_activity_pocket_pdf"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="il.co.gabel.android.uhcarmel.MainActivity" />
+        </activity>
+        <activity
+            android:name=".LocationsActivity"
+            android:label="@string/title_activity_locations2"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="il.co.gabel.android.uhcarmel.MainActivity" />
         </activity>
     </application>
 
