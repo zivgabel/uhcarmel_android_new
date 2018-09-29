@@ -28,7 +28,6 @@
         android:background="@android:drawable/ic_menu_send"
         android:elevation="12dp"
         android:src="@android:drawable/ic_menu_send"
-        android:tooltipText="@string/send_order_button_label"
         app:backgroundTint="@color/colorPrimary"
         app:elevation="6dp"
         android:clickable="true"

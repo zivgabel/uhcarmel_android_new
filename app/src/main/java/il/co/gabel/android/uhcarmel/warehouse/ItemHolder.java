@@ -15,7 +15,7 @@ public class ItemHolder extends RecyclerView.ViewHolder{
     public ItemHolder(View itemView){
         super(itemView);
         new_order_item_name_text_view = itemView.findViewById(R.id.new_order_item_name_text_view);
-        new_order_amout_number_picker = itemView.findViewById(R.id.new_order_amout_number_picker);
+        new_order_amout_number_picker = itemView.findViewById(R.id.new_order_amount_number_picker);
     }
 
     public TextView getNew_order_item_name_text_view() {

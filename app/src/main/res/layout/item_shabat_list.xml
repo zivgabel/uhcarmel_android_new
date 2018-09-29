@@ -2,9 +2,11 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="@dimen/activity_vertical_margin"
     android:layoutDirection="rtl"
-    android:textDirection="rtl">
+    android:textDirection="rtl"
+    tools:showIn="@layout/activity_shabat_list">
     <TableRow>
 
         <TextView
@@ -14,7 +16,8 @@
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:textAlignment="textStart"
-            android:textDirection="rtl" />
+            android:textDirection="rtl"
+            tools:text="זיו גבל"/>
 
         <TextView
             android:id="@+id/shabat_list_item_mirs"
@@ -23,7 +26,8 @@
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:textAlignment="textStart"
-            android:textDirection="rtl" />
+            android:textDirection="rtl"
+            tools:text="2015"/>
 
         <TextView
             android:id="@+id/shabat_list_item_city"
@@ -32,7 +36,8 @@
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:textAlignment="textStart"
-            android:textDirection="rtl" />
+            android:textDirection="rtl"
+            tools:text="חיפה"/>
 
         <TextView
             android:id="@+id/shabat_list_item_address"
@@ -40,7 +45,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:textAlignment="textStart" />
+            android:textAlignment="textStart"
+            tools:text="ארלוזורוב 17"/>
 
         <TextView
             android:id="@+id/shabat_list_item_comment"
@@ -48,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:textAlignment="textStart" />
+            android:textAlignment="textStart"
+            tools:text="חלקי"/>
     </TableRow>
 </TableLayout>

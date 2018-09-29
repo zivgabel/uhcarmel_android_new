@@ -38,6 +38,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 import il.co.gabel.android.uhcarmel.security.User;
 
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mButtonShabatRegister;
     private Button mButtonNewOrder;
     private Button mButtonWarehouseAdmin;
-    private Button mBbuttonShabatAdmin;
+    private Button mButtonShabatAdmin;
     private Button mButtonReportCase;
 
     private FirebaseAuth firebaseAuth;
@@ -182,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     Log.e(TAG, "onChildChanged: UID " + dataSnapshot.getKey());
-                    if(dataSnapshot.getKey()=="user") {
+                    if(Objects.equals(dataSnapshot.getKey(), "user")) {
                         changeHandler(dataSnapshot);
                     }
                 }
@@ -218,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        String msg = "Sucscribed";
+                        String msg = "Subscribed";
                         if (!task.isSuccessful()) {
                             msg = "Not subscribed";
                         }
@@ -226,11 +227,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         if(Utils.currentUser(getApplicationContext()).getWh_admin()){
-            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.new_order_topic))
+            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.new_order_topic)+user.getWh_admin_branch())
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            String msg = "Sucscribed to orders";
+                            String msg = "Subscribe to orders";
                             if (!task.isSuccessful()) {
                                 msg = "Not subscribed to orders";
                             }
@@ -241,11 +242,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private final void setViewsVisibilty(){
+    private void setViewsVisibilty(){
         User user = Utils.currentUser(this);
         Log.e(TAG, "setViewsVisibilty: User: "+user );
         if(user==null){
-            mBbuttonShabatAdmin.setVisibility(View.GONE);
+            mButtonShabatAdmin.setVisibility(View.GONE);
             mButtonNewOrder.setVisibility(View.GONE);
             mButtonShabatRegister.setVisibility(View.GONE);
             mButtonWarehouseAdmin.setVisibility(View.GONE);
@@ -261,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
             mButtonWarehouseAdmin.setVisibility(View.VISIBLE);
         }
         if(user.getShabat_admin()){
-            mBbuttonShabatAdmin.setVisibility(View.VISIBLE);
+            mButtonShabatAdmin.setVisibility(View.VISIBLE);
         }
     }
 
@@ -275,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
         mButtonShabatRegister = findViewById(R.id.button_shabat_register);
         mButtonNewOrder = findViewById(R.id.button_new_order);
         mButtonWarehouseAdmin = findViewById(R.id.button_warehouse_admin);
-        mBbuttonShabatAdmin = findViewById(R.id.button_shabat_admin);
+        mButtonShabatAdmin = findViewById(R.id.button_shabat_admin);
         mButtonLocations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -294,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
                 createIntent(ShabatRegisterActivity.class);
             }
         });
-        mBbuttonShabatAdmin.setOnClickListener(new View.OnClickListener() {
+        mButtonShabatAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createIntent(ShabatListActivity.class);
@@ -421,7 +422,8 @@ public class MainActivity extends AppCompatActivity {
                 // If user interaction was interrupted, the permission request is cancelled and you
                 // receive empty arrays.
                 Log.i(TAG, "User interaction was cancelled.");
-            } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            } else //noinspection StatementWithEmptyBody
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted.
                 //getLastLocation();
             } else {

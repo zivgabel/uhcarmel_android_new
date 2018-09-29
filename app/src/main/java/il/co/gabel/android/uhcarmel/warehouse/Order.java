@@ -81,4 +81,22 @@ public class Order {
         builder.append("\r\n").append("הוזמן מסניף ").append(branch);
         return builder.toString();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Order o = (Order) obj;
+        return this.getFb_key().equals(o.getFb_key());
+    }
+
+    public String getBranchAlias(){
+        switch (getBranch()){
+            case "חיפה":
+                return "haifa";
+            case "קרית אתא":
+                return "kata";
+            default:
+                return "haifa";
+        }
+    }
+
 }

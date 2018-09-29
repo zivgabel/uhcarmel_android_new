@@ -24,11 +24,11 @@ import il.co.gabel.android.uhcarmel.security.User;
 
 public class ShabatRegisterActivity extends AppCompatActivity {
 
-    private Spinner mShabatSpiner;
+    private Spinner mShabatSpinner;
     private Switch mShabatSwitch;
     private EditText mShabatAddress;
     private EditText mShabatComment;
-    private ArrayAdapter<CharSequence> mSpinerAdapter;
+    private ArrayAdapter<CharSequence> mSpinnerAdapter;
     private TextView mShabatFirstName;
     private TextView mShabatLastName;
     private TextView mShabatMirs;
@@ -48,17 +48,17 @@ public class ShabatRegisterActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         uuid= Utils.getUserUID(getApplicationContext());
-        mShabatSpiner = findViewById(R.id.shabat_cities_spinner);
+        mShabatSpinner = findViewById(R.id.shabat_cities_spinner);
         mShabatSwitch = findViewById(R.id.shabat_switch);
         mShabatAddress = findViewById(R.id.shabat_address);
         mShabatComment = findViewById(R.id.shabat_comments);
-        mShabatFirstName = findViewById(R.id.shabat_firstname_text);
-        mShabatLastName = findViewById(R.id.shabat_lasttname_text);
+        mShabatFirstName = findViewById(R.id.shabat_first_name_text);
+        mShabatLastName = findViewById(R.id.shabat_last_name_text);
         mShabatMirs = findViewById(R.id.shabat_mirs_text);
 
-        mSpinerAdapter = ArrayAdapter.createFromResource(this,R.array.shabat_cities_array, android.R.layout.simple_spinner_item);
-        mSpinerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mShabatSpiner.setAdapter(mSpinerAdapter);
+        mSpinnerAdapter = ArrayAdapter.createFromResource(this,R.array.shabat_cities_array, android.R.layout.simple_spinner_item);
+        mSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mShabatSpinner.setAdapter(mSpinnerAdapter);
 
         User user = Utils.currentUser(getApplicationContext());
         Log.e(TAG, "shabat onCreate: USER: fn: "+user.getFirst_name()+" ln: "+user.getLast_name() );
@@ -83,7 +83,7 @@ public class ShabatRegisterActivity extends AppCompatActivity {
         Shabat shabat = new Shabat(
                 mShabatSwitch.isChecked(),
                 mShabatAddress.getText().toString(),
-                mShabatSpiner.getSelectedItem().toString(),
+                mShabatSpinner.getSelectedItem().toString(),
                 mShabatComment.getText().toString(),
                 user.getFirst_name()+" "+user.getLast_name(),
                 user.getMirs(),
@@ -112,7 +112,7 @@ public class ShabatRegisterActivity extends AppCompatActivity {
                         return;
                     }
                     mShabatAddress.setText(shabat.getAddress());
-                    mShabatSpiner.setSelection(mSpinerAdapter.getPosition(shabat.getCity()));
+                    mShabatSpinner.setSelection(mSpinnerAdapter.getPosition(shabat.getCity()));
                     mShabatSwitch.setChecked(shabat.getStatus());
                     mShabatComment.setText(shabat.getCommnet());
                     setViews(shabat.getStatus());
@@ -164,7 +164,7 @@ public class ShabatRegisterActivity extends AppCompatActivity {
     }
 
     private void setViews(Boolean state){
-        mShabatSpiner.setEnabled(state);
+        mShabatSpinner.setEnabled(state);
         mShabatAddress.setEnabled(state);
         mShabatComment.setEnabled(state);
     }

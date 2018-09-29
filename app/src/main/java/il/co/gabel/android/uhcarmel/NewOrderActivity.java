@@ -35,26 +35,27 @@ import il.co.gabel.android.uhcarmel.warehouse.Order;
 
 public class NewOrderActivity extends AppCompatActivity implements ConfirmOrderSendDialogFragment.NoticeDialogListener {
 
-    private RecyclerView recyclerView;
     private static final String TAG = NewOrderActivity.class.getSimpleName();
-    private final ItemAdapter adapter = new ItemAdapter(new ArrayList<Item>());
-    private DatabaseReference databaseReference;
-    private ChildEventListener listener;
+
+    private RecyclerView mRecyclerView;
+    private final ItemAdapter mAdapter = new ItemAdapter(new ArrayList<Item>());
+    private DatabaseReference mDatabaseReference;
+    private ChildEventListener mListener;
     private SearchView mSearchView;
-    private ConfirmOrderSendDialogFragment confirmOrderSendDialogFragment;
+    private ConfirmOrderSendDialogFragment mConfirmOrderSendDialogFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_order);
 
-        recyclerView = findViewById(R.id.new_order_items_recycler_view);
+        mRecyclerView = findViewById(R.id.new_order_items_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-        DividerItemDecoration decoration = new DividerItemDecoration(recyclerView.getContext(),LinearLayoutManager.VERTICAL);
-        recyclerView.addItemDecoration(decoration);
-        databaseReference = Utils.getFBDBReference(getApplicationContext()).child("warehouse").child("items");
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+        DividerItemDecoration decoration = new DividerItemDecoration(mRecyclerView.getContext(),LinearLayoutManager.VERTICAL);
+        mRecyclerView.addItemDecoration(decoration);
+        mDatabaseReference = Utils.getFBDBReference(getApplicationContext()).child("warehouse").child("items");
         attachListeners();
         FloatingActionButton fab = findViewById(R.id.new_order_fab);
         Toolbar toolbar = findViewById(R.id.new_order_toolbar);
@@ -63,12 +64,12 @@ public class NewOrderActivity extends AppCompatActivity implements ConfirmOrderS
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(adapter.getOrdered_items().isEmpty()){
+                if(mAdapter.getOrdered_items().isEmpty()){
                     Toast.makeText(v.getContext(),getString(R.string.new_order_no_items),Toast.LENGTH_LONG).show();
                     return;
                 }
-                confirmOrderSendDialogFragment=new ConfirmOrderSendDialogFragment();
-                confirmOrderSendDialogFragment.show(getFragmentManager(),"new_order_breanch");
+                mConfirmOrderSendDialogFragment =new ConfirmOrderSendDialogFragment();
+                mConfirmOrderSendDialogFragment.show(getFragmentManager(),"new_order_breanch");
             }
         });
 
@@ -87,12 +88,12 @@ public class NewOrderActivity extends AppCompatActivity implements ConfirmOrderS
     }
 
     private void attachListeners(){
-        if(listener==null) {
-            listener = new ChildEventListener() {
+        if(mListener ==null) {
+            mListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     Item item = dataSnapshot.getValue(Item.class);
-                    adapter.addItem(item);
+                    mAdapter.addItem(item);
                 }
 
                 @Override
@@ -115,16 +116,16 @@ public class NewOrderActivity extends AppCompatActivity implements ConfirmOrderS
 
                 }
             };
-            databaseReference.addChildEventListener(listener);
+            mDatabaseReference.addChildEventListener(mListener);
         }
 
     }
 
     private void detachListeners(){
-        if(listener!=null){
-            databaseReference.removeEventListener(listener);
+        if(mListener !=null){
+            mDatabaseReference.removeEventListener(mListener);
         }
-        listener=null;
+        mListener =null;
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -139,13 +140,13 @@ public class NewOrderActivity extends AppCompatActivity implements ConfirmOrderS
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                adapter.getFilter().filter(query);
+                mAdapter.getFilter().filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
+                mAdapter.getFilter().filter(newText);
                 return false;
             }
         });
@@ -156,19 +157,21 @@ public class NewOrderActivity extends AppCompatActivity implements ConfirmOrderS
     public void onDialogPositiveClick(DialogFragment dialog) {
 
         int selectedBranch= ((ConfirmOrderSendDialogFragment) dialog).getSelectedBranch();
-        TypedArray branches=getResources().obtainTypedArray(R.array.new_order_branches);
+        TypedArray branches;
+        branches = getResources().obtainTypedArray(R.array.new_order_branches);
         String branch = branches.getString(selectedBranch);
         SharedPreferences sp = Utils.getSharedPreferences(getApplicationContext());
         int user_mirs=sp.getInt(getString(R.string.user_mirs),0);
         Date date = new Date();
-        Order order = new Order(adapter.getOrdered_items(),user_mirs,date,branch);
+        Order order = new Order(mAdapter.getOrdered_items(),user_mirs,date,branch);
         DatabaseReference reference = Utils.getFBDBReference(getApplicationContext()).child("warehouse").child("orders");
         reference.push().setValue(order);
-        adapter.getOrdered_items().clear();
+        mAdapter.getOrdered_items().clear();
 
-        Utils.sendNotification(getApplicationContext().getString(R.string.new_order_topic),getApplicationContext().getString(R.string.new_order_notif_body_start)+" "+user_mirs);
+        Utils.sendNotification(getApplicationContext().getString(R.string.new_order_topic)+order.getBranchAlias(),getApplicationContext().getString(R.string.new_order_notification_body_start)+" "+user_mirs);
         dialog.dismiss();
         Toast.makeText(getApplicationContext(),getString(R.string.order_success),Toast.LENGTH_LONG).show();
+        branches.recycle();
         onBackPressed();
     }
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,6 +16,7 @@ public class User {
     private Boolean admin;
     private Boolean shabat_admin;
     private Boolean wh_admin;
+    private String wh_admin_branch;
     private String first_name;
     private String last_name;
     private Shabat shabat;
@@ -90,6 +90,14 @@ public class User {
         this.shabat = shabat;
     }
 
+    public String getWh_admin_branch() {
+        return wh_admin_branch;
+    }
+
+    public void setWh_admin_branch(String wh_admin_branch) {
+        this.wh_admin_branch = wh_admin_branch;
+    }
+
     public void saveData(Context context){
         Log.e(TAG, "USER saveData:USER fn: " +getFirst_name()+" ln: "+getLast_name());
         SharedPreferences.Editor editor = Utils.getSharedPreferencesEditor(context);
@@ -99,6 +107,7 @@ public class User {
         editor.putInt(context.getString(R.string.user_mirs), getMirs());
         editor.putString(context.getString(R.string.sp_last_name), getLast_name());
         editor.putString(context.getString(R.string.sp_first_name), getFirst_name());
+        editor.putString(context.getString(R.string.sp_wh_admin_branch), getWh_admin_branch());
         editor.commit();
     }
     public void removeData(Context context){
@@ -109,6 +118,7 @@ public class User {
         editor.remove(context.getString(R.string.user_mirs));
         editor.remove(context.getString(R.string.sp_last_name));
         editor.remove(context.getString(R.string.sp_first_name));
+        editor.remove(context.getString(R.string.sp_wh_admin_branch));
         editor.commit();
     }
 

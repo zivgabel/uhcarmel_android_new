@@ -18,7 +18,7 @@ import java.util.Map;
 import il.co.gabel.android.uhcarmel.R;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemHolder> implements Filterable {
-    private List<Item> items;
+    private final List<Item> items;
     private List<Item> itemsFiltered;
     private Map<String,Integer> ordered_items;
     private static final String TAG = ItemAdapter.class.getSimpleName();

@@ -16,7 +16,7 @@ import il.co.gabel.android.uhcarmel.R;
 
 public class ShabatListAdapter extends RecyclerView.Adapter<ShabatListHolder>{
     private static final String TAG = ShabatListAdapter.class.getSimpleName();
-    private List<Shabat> shabat_list;
+    private final List<Shabat> shabat_list;
 
     public ShabatListAdapter(ArrayList<Shabat> shabat_list){
         this.shabat_list =shabat_list;
@@ -29,7 +29,7 @@ public class ShabatListAdapter extends RecyclerView.Adapter<ShabatListHolder>{
                 if(shabat.getStatus()){
                     shabat_list.add(shabat);
                 }
-                Collections.sort(shabat_list,new ShabatComperator());
+                Collections.sort(shabat_list,new ShabatComparator());
                 notifyDataSetChanged();
                 return;
             }
@@ -37,7 +37,7 @@ public class ShabatListAdapter extends RecyclerView.Adapter<ShabatListHolder>{
 
         if (shabat.getStatus()){
             shabat_list.add(shabat);
-            Collections.sort(shabat_list,new ShabatComperator());
+            Collections.sort(shabat_list,new ShabatComparator());
             notifyDataSetChanged();
         }
 
@@ -70,7 +70,7 @@ public class ShabatListAdapter extends RecyclerView.Adapter<ShabatListHolder>{
         return shabat_list.size();
     }
 
-    private class ShabatComperator implements Comparator<Shabat> {
+    private class ShabatComparator implements Comparator<Shabat> {
 
         @Override
         public int compare(Shabat o1, Shabat o2) {

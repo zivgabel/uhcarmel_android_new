@@ -28,26 +28,26 @@ import il.co.gabel.android.uhcarmel.locations.LocationsAdapter;
 public class LocationsActivity extends AppCompatActivity {
     private static final String TAG = LocationsActivity.class.getSimpleName();
 
-    private RecyclerView recyclerView;
+    private RecyclerView mRecyclerView;
     private SearchView mSearchView;
-    private LocationsAdapter adapter;
+    private LocationsAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_locations);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        recyclerView = findViewById(R.id.locations_recycle_view);
+        mRecyclerView = findViewById(R.id.locations_recycle_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
-        recyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setLayoutManager(layoutManager);
         List<Location> locations = new ArrayList<>();
-        adapter = new LocationsAdapter(locations);
-        recyclerView.setAdapter(adapter);
-        DividerItemDecoration decoration = new DividerItemDecoration(recyclerView.getContext(),LinearLayoutManager.VERTICAL);
-        recyclerView.addItemDecoration(decoration);
+        mAdapter = new LocationsAdapter(locations);
+        mRecyclerView.setAdapter(mAdapter);
+        DividerItemDecoration decoration = new DividerItemDecoration(mRecyclerView.getContext(),LinearLayoutManager.VERTICAL);
+        mRecyclerView.addItemDecoration(decoration);
 
         DatabaseReference databaseReference = Utils.getFBDBReference(getApplicationContext()).child("places");
         ChildEventListener listener = new ChildEventListener() {
@@ -55,7 +55,7 @@ public class LocationsActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Location location = dataSnapshot.getValue(Location.class);
                 Log.e(TAG, "onChildAdded: New location"+location.getName() );
-                adapter.addLocation(location);
+                mAdapter.addLocation(location);
             }
 
             @Override
@@ -94,13 +94,13 @@ public class LocationsActivity extends AppCompatActivity {
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                adapter.getFilter().filter(query);
+                mAdapter.getFilter().filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
+                mAdapter.getFilter().filter(newText);
                 return false;
             }
         });

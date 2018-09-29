@@ -1,18 +1,15 @@
 package il.co.gabel.android.uhcarmel;
 
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 public class PocketPDFActivity extends AppCompatActivity {
 
-    public static final String FRAGMENT_PDF_RENDERER_BASIC = "pdf_renderer_basic";
+    private static final String FRAGMENT_PDF_RENDERER_BASIC = "pdf_renderer_basic";
     private static final String TAG=PocketPDFActivity.class.getSimpleName();
 
     @Override

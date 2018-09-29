@@ -15,12 +15,9 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
-import il.co.gabel.android.uhcarmel.warehouse.ConfirmOrderDeleteDialogFragmnet;
-import il.co.gabel.android.uhcarmel.warehouse.Item;
+import il.co.gabel.android.uhcarmel.warehouse.ConfirmOrderDeleteDialogFragment;
 import il.co.gabel.android.uhcarmel.warehouse.Order;
 import il.co.gabel.android.uhcarmel.warehouse.OrderListAdapter;
 
@@ -31,11 +28,11 @@ import il.co.gabel.android.uhcarmel.warehouse.OrderListAdapter;
  * item details are presented side-by-side with a list of items
  * in a {@link OrderListActivity}.
  */
-public class OrderDetailActivity extends AppCompatActivity implements ConfirmOrderDeleteDialogFragmnet.NoticeDialogListener{
+public class OrderDetailActivity extends AppCompatActivity implements ConfirmOrderDeleteDialogFragment.NoticeDialogListener{
     public static final String ARG_ITEM_ID = "item_id";
     private Order order;
     private static final String TAG=OrderDetailActivity.class.getCanonicalName();
-    private ConfirmOrderDeleteDialogFragmnet confirmOrderDeleteDialogFragmnet;
+    private ConfirmOrderDeleteDialogFragment confirmOrderDeleteDialogFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +51,7 @@ public class OrderDetailActivity extends AppCompatActivity implements ConfirmOrd
             StringBuilder builder = new StringBuilder();
             builder.append(getString(R.string.order_detail_from_user)).append(": ").append(order.getMirs()).append("\r\n");
             Map<String, Integer> items = order.getItems();
-            for (Iterator<String> it = items.keySet().iterator(); it.hasNext(); ) {
-                String itemName = it.next();
+            for (String itemName : items.keySet()) {
                 builder.append(itemName).append(": ").append(items.get(itemName)).append("\r\n");
             }
             builder.append("\r\n").append(getString(R.string.order_detail_from_branch)).append(": ").append(order.getBranch());
@@ -69,9 +65,9 @@ public class OrderDetailActivity extends AppCompatActivity implements ConfirmOrd
             @Override
             public void onClick(View view) {
                 if(order!=null){
-                    confirmOrderDeleteDialogFragmnet = new ConfirmOrderDeleteDialogFragmnet();
+                    confirmOrderDeleteDialogFragment = new ConfirmOrderDeleteDialogFragment();
                     FragmentManager fragmentManager = getFragmentManager();
-                    confirmOrderDeleteDialogFragmnet.show(fragmentManager,"DeleteOrderDialogFragment");
+                    confirmOrderDeleteDialogFragment.show(fragmentManager,"DeleteOrderDialogFragment");
                 }
             }
         });
@@ -108,14 +104,14 @@ public class OrderDetailActivity extends AppCompatActivity implements ConfirmOrd
         completed_reference.push().setValue(order);
         String prefix=getString(R.string.new_order_user_topic_prefix);
         String mirs = String.valueOf(order.getMirs());
-        String msg = getString(R.string.new_order__deleted_notif_body);
+        String msg = getString(R.string.new_order_deleted_notification_body);
         Utils.sendNotification(prefix+mirs,msg);
-        confirmOrderDeleteDialogFragmnet.dismiss();
+        confirmOrderDeleteDialogFragment.dismiss();
         onBackPressed();
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
-        confirmOrderDeleteDialogFragmnet.dismiss();
+        confirmOrderDeleteDialogFragment.dismiss();
     }
 }

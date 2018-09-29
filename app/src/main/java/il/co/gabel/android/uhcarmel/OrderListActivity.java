@@ -3,14 +3,11 @@ package il.co.gabel.android.uhcarmel;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -24,17 +21,19 @@ import il.co.gabel.android.uhcarmel.warehouse.Order;
 import il.co.gabel.android.uhcarmel.warehouse.OrderListAdapter;
 
 public class OrderListActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
-    private OrderListAdapter adapter;
-    private DatabaseReference databaseReference;
-    private ChildEventListener listener;
     private static final String TAG=OrderListActivity.class.getSimpleName();
+
+    private RecyclerView mRecyclerView;
+    private OrderListAdapter mAdapter;
+    private DatabaseReference mDatabaseReference;
+    private ChildEventListener mListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_list);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
         // Show the Up button in the action bar.
@@ -43,29 +42,37 @@ public class OrderListActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        recyclerView = findViewById(R.id.order_list);
-        setupRecyclerView(recyclerView);
+        mRecyclerView = findViewById(R.id.order_list);
+        setupRecyclerView(mRecyclerView);
         attachListener();
 
     }
     @Override
     protected void onResume() {
+        mAdapter.clear();
         super.onResume();
         attachListener();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mDatabaseReference!=null){
+            mDatabaseReference.removeEventListener(mListener);
+        }
+        mListener=null;
+
+    }
+
     private void attachListener(){
-        databaseReference = Utils.getFBDBReference(getApplicationContext()).child("warehouse").child("orders");
-        if(listener==null){
-            listener = new ChildEventListener() {
+        mDatabaseReference = Utils.getFBDBReference(getApplicationContext()).child("warehouse").child("orders");
+        if(mListener ==null){
+            mListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     Order order = dataSnapshot.getValue(Order.class);
                     order.setFb_key(dataSnapshot.getKey());
-                    OrderListAdapter.addItem(order);
-                    if(adapter!=null){
-                        adapter.notifyDataSetChanged();
-                    }
+                    mAdapter.addItem(order);
                 }
 
                 @Override
@@ -77,7 +84,7 @@ public class OrderListActivity extends AppCompatActivity {
                 public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                     Log.e(TAG, "OrderList onChildRemoved: uid: "+dataSnapshot.getKey() );
                     Order order = dataSnapshot.getValue(Order.class);
-                    OrderListAdapter.removeItem(order,adapter);
+                    mAdapter.removeItem(order);
                 }
 
                 @Override
@@ -90,15 +97,15 @@ public class OrderListActivity extends AppCompatActivity {
 
                 }
             };
-            databaseReference.addChildEventListener(listener);
+            mDatabaseReference.addChildEventListener(mListener);
         }
 
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         List<Order> orders = new ArrayList<>();
-        adapter = new OrderListAdapter(this, orders);
-        recyclerView.setAdapter(adapter);
+        mAdapter = new OrderListAdapter(this, orders);
+        recyclerView.setAdapter(mAdapter);
     }
 
 }

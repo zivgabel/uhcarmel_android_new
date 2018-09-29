@@ -4,11 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,12 +21,13 @@ import il.co.gabel.android.uhcarmel.OrderListActivity;
 import il.co.gabel.android.uhcarmel.R;
 
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListHolder>{
-    private final OrderListActivity mParentActivity;
-    private static List<Order> orders = new ArrayList<>();
     private static final String TAG=OrderListAdapter.class.getSimpleName();
+    private static List<Order> oreders = new ArrayList<>();
+
+    private final OrderListActivity mParentActivity;
 
     public OrderListAdapter(OrderListActivity parent,List<Order> items) {
-        orders = items;
+        oreders = items;
         mParentActivity = parent;
     }
 
@@ -45,26 +50,48 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListHolder>{
     }
 
     @Override
-    public void onBindViewHolder(final OrderListHolder holder, int position) {
-        holder.order_list_mirs_text_view.setText(String.valueOf(orders.get(position).getMirs()));
-        holder.order_list_date_text_view.setText(orders.get(position).getOrder_date().toString());
-
-        holder.itemView.setTag(orders.get(position));
+    public void onBindViewHolder(@NonNull final OrderListHolder holder, int position) {
+        Log.e(TAG, "onBindViewHolder: position "+position );
+        if(position==0){
+            holder.order_list_mirs_text_view.setText("מירס");
+            holder.order_list_branch_text_view.setText("מרכז ציוד");
+            holder.order_list_date_text_view.setText("תאריך");
+            return;
+        }
+        position--;
+        holder.order_list_mirs_text_view.setText(String.valueOf(oreders.get(position).getMirs()));
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        holder.order_list_date_text_view.setText(format.format(oreders.get(position).getOrder_date()));
+        holder.order_list_branch_text_view.setText(oreders.get(position).getBranch());
+        holder.itemView.setTag(oreders.get(position));
         holder.itemView.setOnClickListener(mOnClickListener);
     }
     @Override
     public int getItemCount() {
-        return orders.size();
+        return oreders.size()+1;
     }
 
-    public static void addItem(Order order){
-        orders.add(order);
+    public void addItem(Order order){
+        boolean exists=false;
+        Iterator<Order> i = oreders.iterator();
+        while (i.hasNext()){
+            Order o = i.next();
+            if(o.equals(order)){
+                exists=true;
+            }
+        }
+        if(!exists){
+            oreders.add(order);
+        }
+        Collections.sort(oreders,new OrderComparator());
+        notifyDataSetChanged();
+
     }
 
     public static Order getOrder(String date_string){
-        for (Order o : orders) {
-            String odate = o.getOrder_date().toString();
-            if (odate.equals(date_string)) {
+        for (Order o : oreders) {
+            String orderDate = o.getOrder_date().toString();
+            if (orderDate.equals(date_string)) {
                 return o;
             }
         }
@@ -72,17 +99,33 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListHolder>{
     }
 
 
-    public static void removeItem(Order order,OrderListAdapter adapter) {
+    public void removeItem(Order order) {
 
-        Iterator<Order> i = orders.iterator();
+        Iterator<Order> i = oreders.iterator();
         while (i.hasNext()){
             Order o = i.next();
             if(o.equals(order)){
                 i.remove();
-                if(adapter!=null) {
-                    adapter.notifyDataSetChanged();
-                }
             }
         }
+        Collections.sort(oreders,new OrderComparator());
+        notifyDataSetChanged();
     }
+
+    public void clear(){
+        oreders.clear();
+    }
+
+
+    private class OrderComparator implements Comparator<Order> {
+
+        @Override
+        public int compare(Order o1, Order o2) {
+            if(o1.getBranch().equals(o2.getBranch())){
+                return o1.getOrder_date().compareTo(o2.getOrder_date());
+            }
+            return o1.getBranch().compareTo(o2.getBranch());
+        }
+    }
+
 }

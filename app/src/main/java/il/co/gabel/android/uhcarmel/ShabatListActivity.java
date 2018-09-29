@@ -26,12 +26,12 @@ import il.co.gabel.android.uhcarmel.Shabat.Shabat;
 import il.co.gabel.android.uhcarmel.Shabat.ShabatListAdapter;
 
 public class ShabatListActivity extends AppCompatActivity {
+    private static final String TAG=ShabatListActivity.class.getSimpleName();
 
     private RecyclerView mShabatListRecyclerView;
     private ShabatListAdapter mShabatListAdapter;
     private DatabaseReference mReference;
     private ChildEventListener mChildEventListener;
-    private static final String TAG=ShabatListActivity.class.getSimpleName();
     private LinearLayoutManager mShabatLayoutManager;
 
 

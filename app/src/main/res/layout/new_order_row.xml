@@ -22,7 +22,7 @@
         tools:text="Message" />
 
     <NumberPicker
-        android:id="@+id/new_order_amout_number_picker"
+        android:id="@+id/new_order_amount_number_picker"
         android:layout_width="wrap_content"
         android:layout_height="70dp"
         android:background="@drawable/drawablenp"
