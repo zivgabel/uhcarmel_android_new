@@ -28,34 +28,36 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
+import il.co.gabel.android.uhcarmel.security.BasicAuthenticationListener;
+import il.co.gabel.android.uhcarmel.security.UHFireBaseManager;
 import il.co.gabel.android.uhcarmel.warehouse.ConfirmOrderSendDialogFragment;
 import il.co.gabel.android.uhcarmel.warehouse.Item;
 import il.co.gabel.android.uhcarmel.warehouse.ItemAdapter;
 import il.co.gabel.android.uhcarmel.warehouse.Order;
 
-public class NewOrderActivity extends AppCompatActivity implements ConfirmOrderSendDialogFragment.NoticeDialogListener {
+public class NewOrderActivity extends AppCompatActivity implements ConfirmOrderSendDialogFragment.NoticeDialogListener{
 
     private static final String TAG = NewOrderActivity.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
     private final ItemAdapter mAdapter = new ItemAdapter(new ArrayList<Item>());
-    private DatabaseReference mDatabaseReference;
     private ChildEventListener mListener;
     private SearchView mSearchView;
     private ConfirmOrderSendDialogFragment mConfirmOrderSendDialogFragment;
+    private UHFireBaseManager fireBaseManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_order);
-
+        fireBaseManager = new UHFireBaseManager(NewOrderActivity.this,new BasicAuthenticationListener(NewOrderActivity.this));
+        fireBaseManager.getUserDetails();
         mRecyclerView = findViewById(R.id.new_order_items_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
         DividerItemDecoration decoration = new DividerItemDecoration(mRecyclerView.getContext(),LinearLayoutManager.VERTICAL);
         mRecyclerView.addItemDecoration(decoration);
-        mDatabaseReference = Utils.getFBDBReference(getApplicationContext()).child("warehouse").child("items");
         attachListeners();
         FloatingActionButton fab = findViewById(R.id.new_order_fab);
         Toolbar toolbar = findViewById(R.id.new_order_toolbar);
@@ -72,7 +74,6 @@ public class NewOrderActivity extends AppCompatActivity implements ConfirmOrderS
                 mConfirmOrderSendDialogFragment.show(getFragmentManager(),"new_order_breanch");
             }
         });
-
     }
 
     @Override
@@ -116,14 +117,14 @@ public class NewOrderActivity extends AppCompatActivity implements ConfirmOrderS
 
                 }
             };
-            mDatabaseReference.addChildEventListener(mListener);
+            fireBaseManager.addItemsEventListener(mListener);
         }
 
     }
 
     private void detachListeners(){
         if(mListener !=null){
-            mDatabaseReference.removeEventListener(mListener);
+            fireBaseManager.removeItemsEventListener(mListener);
         }
         mListener =null;
     }
@@ -155,25 +156,26 @@ public class NewOrderActivity extends AppCompatActivity implements ConfirmOrderS
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-
         int selectedBranch= ((ConfirmOrderSendDialogFragment) dialog).getSelectedBranch();
         TypedArray branches;
         branches = getResources().obtainTypedArray(R.array.new_order_branches);
         String branch = branches.getString(selectedBranch);
         SharedPreferences sp = Utils.getSharedPreferences(getApplicationContext());
-        int user_mirs=sp.getInt(getString(R.string.user_mirs),0);
+        int user_mirs=fireBaseManager.getUser().getMirs();
         Date date = new Date();
         Order order = new Order(mAdapter.getOrdered_items(),user_mirs,date,branch);
-        DatabaseReference reference = Utils.getFBDBReference(getApplicationContext()).child("warehouse").child("orders");
+        order.setUserFirebaseId(Utils.getUserUID(NewOrderActivity.this));
+        DatabaseReference reference = Utils.getFBDBReference(getApplicationContext()).child("orders");
         reference.push().setValue(order);
         mAdapter.getOrdered_items().clear();
 
-        Utils.sendNotification(getApplicationContext().getString(R.string.new_order_topic)+order.getBranchAlias(),getApplicationContext().getString(R.string.new_order_notification_body_start)+" "+user_mirs);
+        Utils.sendNotification(order.getBranchAlias()+getApplicationContext().getString(R.string.new_order_topic),getApplicationContext().getString(R.string.new_order_notification_body_start)+" "+user_mirs);
         dialog.dismiss();
         Toast.makeText(getApplicationContext(),getString(R.string.order_success),Toast.LENGTH_LONG).show();
         branches.recycle();
         onBackPressed();
     }
+
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {

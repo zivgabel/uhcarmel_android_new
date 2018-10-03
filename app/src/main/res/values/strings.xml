@@ -13,7 +13,7 @@
     <string name="dialog_confirm_order_delete">למחוק את ההזמנה ?</string>
     <string name="dialog_confirm_delete">כן</string>
     <string name="dialog_dismiss_delete">לא</string>
-    <string name="new_order_topic">production-new-orders-</string>
+    <string name="new_order_topic">production-new-orders</string>
     <string name="sp_last_name">SP_USER_LAST_NAME</string>
     <string name="sp_first_name">SP_USER_FIRST_NAME</string>
     <string name="title_activity_shabat_register">רישום לכוננות שבת</string>
@@ -69,4 +69,7 @@
     <string name="shabat_register_address_hint">הכנס את הכתובת שלך</string>
     <string name="shabat_register_comment_hint">הכנס הערות במידת הצורך</string>
     <string name="sp_wh_admin_branch">SP_USER_WH_ADMIN_BRANCH</string>
+    <string name="main_manu_signout_title">התנתק</string>
+    <string name="main_manu_signin_title">התחבר</string>
+    <string name="title_activity_orders">OrdersActivity</string>
 </resources>

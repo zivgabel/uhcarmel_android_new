@@ -1,48 +1,37 @@
 package il.co.gabel.android.uhcarmel;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.util.Arrays;
-import java.util.Objects;
-
+import il.co.gabel.android.uhcarmel.security.UHFireBaseManager;
 import il.co.gabel.android.uhcarmel.security.User;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements UHFireBaseManager.AuthenticationListener {
 
     private static final String TAG=MainActivity.class.getSimpleName();
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
@@ -59,11 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private Button mButtonShabatAdmin;
     private Button mButtonReportCase;
 
-    private FirebaseAuth firebaseAuth;
-    private DatabaseReference databaseReference;
-    private ChildEventListener listener;
-    private FirebaseAuth.AuthStateListener authStateListener;
 
+    private UHFireBaseManager authenticationManager;
     private FusedLocationProviderClient mFusedLocationClient;
     private Location mLastLocation;
 
@@ -74,20 +60,25 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FirebaseApp.initializeApp(this);
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         setButtons();
+        authenticationManager = new UHFireBaseManager(MainActivity.this,this);
+        authenticationManager.getUserDetails();
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         setWebview();
-        handleAuthentication();
-        getUserDetails();
-        setViewsVisibilty();
+        requestPermissions();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        authenticationManager.getUserDetails();
         setWebview();
-        handleAuthentication();
-        attachListeners();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        authenticationManager.removeFireBaseUserListener();
     }
 
     private void setWebview(){
@@ -100,151 +91,62 @@ public class MainActivity extends AppCompatActivity {
         webView.loadData(encodedHtml,"text/html", "base64");
     }
 
-    private void handleAuthentication() {
-        if(firebaseAuth==null) {
-            firebaseAuth = FirebaseAuth.getInstance();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Log.e(TAG, "onCreateOptionsMenu: ");
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        MenuItem signin = menu.findItem(R.id.signin);
+        MenuItem signout = menu.findItem(R.id.signout);
+        if(authenticationManager.isFireBaseUserExists()){
+            signin.setVisible(false);
+            signout.setVisible(true);
+        } else {
+            signin.setVisible(true);
+            signout.setVisible(false);
         }
-        if (authStateListener == null) {
-            authStateListener = new FirebaseAuth.AuthStateListener() {
-                @Override
-                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                    FirebaseUser user = firebaseAuth.getCurrentUser();
-                    if (user != null) {
-                        onSignedInInitialize(user);
-                    } else {
-                        onSignedOutCleanup();
-                        startActivityForResult(
-                                AuthUI.getInstance()
-                                        .createSignInIntentBuilder()
-                                        .setAvailableProviders(Arrays.asList(
-                                                new AuthUI.IdpConfig.EmailBuilder().build(),
-                                                new AuthUI.IdpConfig.GoogleBuilder().build()
-                                        )).build(),
-                                RC_SIGN_IN);
-                    }
-                }
-            };
-            firebaseAuth.addAuthStateListener(authStateListener);
-        }
-    }
-
-    private void onSignedOutCleanup(){
-        User user = Utils.currentUser(getApplicationContext());
-        if(user!=null){
-            user.removeData(getApplicationContext());
-        }
-        setViewsVisibilty();
-    }
-
-    private void onSignedInInitialize(FirebaseUser user) {
-        SharedPreferences.Editor editor = Utils.getSharedPreferencesEditor(getApplicationContext());
-        editor.putString(getString(R.string.display_name_key),user.getDisplayName());
-        editor.putString(getString(R.string.user_uid_key),user.getUid());
-        editor.commit();
-        getUserDetails();
-    }
-    private void getUserDetails(){
-        if(databaseReference==null) {
-            databaseReference = Utils.getFBDBReference(getApplicationContext()).child("users").child(Utils.getUserUID(getApplicationContext()));
-        }
-        attachListeners();
-    }
-
-    private void attachListeners(){
-        if(listener==null) {
-            listener = new ChildEventListener() {
-                SharedPreferences sp = Utils.getSharedPreferences(getApplicationContext());
-
-                private void deleteHandler(@NonNull DataSnapshot dataSnapshot){
-                    User user = dataSnapshot.getValue(User.class);
-                    Context context = getApplicationContext();
-                    user.removeData(context);
-                    setViewsVisibilty();
-                }
-
-                private void changeHandler(@NonNull DataSnapshot dataSnapshot) {
-                    User user = dataSnapshot.getValue(User.class);
-                    Log.e(TAG, "user data changeHandler: "+user.getFirst_name()+" "+user.getLast_name() );
-                    Context context = getApplicationContext();
-                    user.saveData(context);
-                    subscribeToOrdersTopic(user);
-                    setViewsVisibilty();
-                }
-
-
-                @Override
-                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    Log.e(TAG, "onChildAdded: UID " + dataSnapshot.getKey());
-                    if(dataSnapshot.getKey().equals("user")) {
-                        changeHandler(dataSnapshot);
-                    }
-                }
-
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    Log.e(TAG, "onChildChanged: UID " + dataSnapshot.getKey());
-                    if(Objects.equals(dataSnapshot.getKey(), "user")) {
-                        changeHandler(dataSnapshot);
-                    }
-                }
-
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                    Log.e(TAG, "onChildRemoved: UID " + dataSnapshot.getKey());
-                    if(dataSnapshot.getKey()=="user") {
-                        deleteHandler(dataSnapshot);
-                    }
-                }
-
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    Log.e(TAG, "onChildMoved: UID " + dataSnapshot.getKey());
-                    if(dataSnapshot.getKey()=="user") {
-                        deleteHandler(dataSnapshot);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            };
-            databaseReference.addChildEventListener(listener);
-
-        }
-    }
-
-    private void subscribeToOrdersTopic(User user){
-        FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.new_order_user_topic_prefix)+String.valueOf(user.getMirs()))
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        String msg = "Subscribed";
-                        if (!task.isSuccessful()) {
-                            msg = "Not subscribed";
-                        }
-                        Log.d(TAG, msg);
-                    }
-                });
-        if(Utils.currentUser(getApplicationContext()).getWh_admin()){
-            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.new_order_topic)+user.getWh_admin_branch())
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            String msg = "Subscribe to orders";
-                            if (!task.isSuccessful()) {
-                                msg = "Not subscribed to orders";
-                            }
-                            Log.d(TAG, msg);
-                        }
-                    });
-        }
+        return true;
     }
 
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.signin:
+                authenticationManager.authenticate();
+                return true;
+            case R.id.signout:
+                authenticationManager.signout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setMenuVisibility(){
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        Menu menu = toolbar.getMenu();
+        if(menu!=null){
+            Log.e(TAG, "setViewsVisibilty: menu is available" );
+            MenuItem signin = menu.findItem(R.id.signin);
+            MenuItem signout = menu.findItem(R.id.signout);
+            if(signin!=null && signout!=null) {
+                if (authenticationManager.isFireBaseUserExists()) {
+                    signin.setVisible(false);
+                    signout.setVisible(true);
+                } else {
+                    signin.setVisible(true);
+                    signout.setVisible(false);
+                }
+            }
+        } else {
+            Log.e(TAG, "setViewsVisibilty: menu is not available" );
+        }
+    }
     private void setViewsVisibilty(){
-        User user = Utils.currentUser(this);
+        User user = authenticationManager.getUser();
         Log.e(TAG, "setViewsVisibilty: User: "+user );
+        setMenuVisibility();
         if(user==null){
             mButtonShabatAdmin.setVisibility(View.GONE);
             mButtonNewOrder.setVisibility(View.GONE);
@@ -258,12 +160,18 @@ public class MainActivity extends AppCompatActivity {
         mButtonNewOrder.setVisibility(View.VISIBLE);
         mButtonShabatRegister.setVisibility(View.VISIBLE);
         mButtonEmsPocket.setVisibility(View.VISIBLE);
-        if(user.getWh_admin()){
+        if(user.getPermissions().getWarehouse()){
             mButtonWarehouseAdmin.setVisibility(View.VISIBLE);
+        } else {
+            mButtonWarehouseAdmin.setVisibility(View.GONE);
         }
-        if(user.getShabat_admin()){
+        if(user.getPermissions().getShabat()){
             mButtonShabatAdmin.setVisibility(View.VISIBLE);
+        } else {
+            mButtonShabatAdmin.setVisibility(View.GONE);
         }
+
+
     }
 
 
@@ -489,27 +397,28 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-
-
     @Override
-    protected void onPause() {
-        super.onPause();
-        databaseReference.removeEventListener(listener);
-        listener=null;
+    public void userAdded() {
+        setViewsVisibilty();
     }
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            if (resultCode == RESULT_OK) {
-                getUserDetails();
-            } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Sign in canceled", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-            if (!checkPermissions()) {
-                requestPermissions();
-            }
-        }
+    public void userRemoved() {
+        setViewsVisibilty();
+    }
+
+    @Override
+    public void userChanged() {
+        setViewsVisibilty();
+    }
+
+    @Override
+    public void fireBaseUserSignedIn() {
+        setMenuVisibility();
+    }
+
+    @Override
+    public void fireBaseUserSignedOut() {
+        setMenuVisibility();
     }
 }

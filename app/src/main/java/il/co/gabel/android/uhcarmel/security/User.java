@@ -19,7 +19,10 @@ public class User {
     private String wh_admin_branch;
     private String first_name;
     private String last_name;
+    private String firstName;
+    private String lastName;
     private Shabat shabat;
+    private Permissions permissions;
     private static final String TAG=User.class.getSimpleName();
 
 
@@ -91,11 +94,45 @@ public class User {
     }
 
     public String getWh_admin_branch() {
-        return wh_admin_branch;
+        if(wh_admin_branch==null){
+            return "haifa";
+        }
+        switch (wh_admin_branch){
+            case "חיפה":
+                return "haifa";
+            case "קרית אתא":
+                return "kata";
+            default:
+                return "haifa";
+        }
     }
 
     public void setWh_admin_branch(String wh_admin_branch) {
         this.wh_admin_branch = wh_admin_branch;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Permissions getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Permissions permissions) {
+        this.permissions = permissions;
     }
 
     public void saveData(Context context){

@@ -12,6 +12,7 @@ public class Order {
     private String branch;
     private Boolean ready = false;
     private String fb_key;
+    private String userFirebaseId;
 
     public Order(){}
 
@@ -69,6 +70,14 @@ public class Order {
 
     public void setReady(Boolean ready) {
         this.ready = ready;
+    }
+
+    public String getUserFirebaseId() {
+        return userFirebaseId;
+    }
+
+    public void setUserFirebaseId(String userFirebaseId) {
+        this.userFirebaseId = userFirebaseId;
     }
 
     @Override

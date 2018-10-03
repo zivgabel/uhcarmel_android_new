@@ -65,7 +65,7 @@ public class Utils {
 
     public static String getUserUID(Context context){
         SharedPreferences sp = getSharedPreferences(context);
-        return sp.getString(context.getString(R.string.user_uid_key),"");
+        return sp.getString(context.getString(R.string.user_uid_key),null);
     }
 
     private static FirebaseDatabase getFBDatabase(){
@@ -98,8 +98,6 @@ public class Utils {
 
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(JSON, postBody);
-
-
 
 
         final Request request = new Request.Builder()

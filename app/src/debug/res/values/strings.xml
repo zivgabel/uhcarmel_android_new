@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="FIREBASE_DATABASE_PREFIX">devel</string>
-    <string name="new_order_topic">devel-new-orders-</string>
-    <string name="new_order_user_topic_prefix">orders-devel-</string>
+    <string name="FIREBASE_DATABASE_PREFIX">devel-new</string>
+    <string name="new_order_topic">devel-new-orders-new-</string>
+    <string name="new_order_user_topic_prefix">orders-devel-new-</string>
 
 </resources>
