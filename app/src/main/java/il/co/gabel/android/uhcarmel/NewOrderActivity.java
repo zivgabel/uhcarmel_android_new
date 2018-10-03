@@ -160,7 +160,6 @@ public class NewOrderActivity extends AppCompatActivity implements ConfirmOrderS
         TypedArray branches;
         branches = getResources().obtainTypedArray(R.array.new_order_branches);
         String branch = branches.getString(selectedBranch);
-        SharedPreferences sp = Utils.getSharedPreferences(getApplicationContext());
         int user_mirs=fireBaseManager.getUser().getMirs();
         Date date = new Date();
         Order order = new Order(mAdapter.getOrdered_items(),user_mirs,date,branch);

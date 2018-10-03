@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,11 +27,11 @@
         <activity
             android:name=".NewOrderActivity"
             android:label="@string/title_activity_new_order"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="il.co.gabel.android.uhcarmel.MainActivity" />
+                android:value="il.co.gabel.android.uhcarmel.ui.MainActivity" />
         </activity>
 
         <service android:name=".OrdersSubscribeService">
@@ -43,65 +43,65 @@
         <activity
             android:name=".ShabatRegisterActivity"
             android:label="@string/title_activity_shabat_register"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="il.co.gabel.android.uhcarmel.MainActivity" />
+                android:value="il.co.gabel.android.uhcarmel.ui.MainActivity" />
         </activity>
         <activity
             android:name=".ShabatListActivity"
             android:label="@string/title_activity_shabat_list"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="il.co.gabel.android.uhcarmel.MainActivity" />
+                android:value="il.co.gabel.android.uhcarmel.ui.MainActivity" />
         </activity>
         <activity
-            android:name=".OrderListActivity"
+            android:name=".ui.OrderListActivity"
             android:label="@string/title_activity_order_list"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="il.co.gabel.android.uhcarmel.MainActivity" />
+                android:value="il.co.gabel.android.uhcarmel.ui.MainActivity" />
         </activity>
         <activity
             android:name=".OrderDetailActivity"
             android:label="@string/title_activity_order_detail"
-            android:parentActivityName=".OrderListActivity"
+            android:parentActivityName=".ui.OrderListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="il.co.gabel.android.uhcarmel.OrderListActivity" />
+                android:value="il.co.gabel.android.uhcarmel.ui.OrderListActivity" />
         </activity>
         <activity
             android:name=".PocketPDFActivity"
             android:label="@string/title_activity_pocket_pdf"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="il.co.gabel.android.uhcarmel.MainActivity" />
+                android:value="il.co.gabel.android.uhcarmel.ui.MainActivity" />
         </activity>
         <activity
             android:name=".LocationsActivity"
             android:label="@string/title_activity_locations2"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="il.co.gabel.android.uhcarmel.MainActivity" />
+                android:value="il.co.gabel.android.uhcarmel.ui.MainActivity" />
         </activity>
         <activity
-            android:name=".warehouse.OrdersActivity"
+            android:name=".ui.OrdersActivity"
             android:label="@string/title_activity_orders"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="il.co.gabel.android.uhcarmel.MainActivity" />
+                android:value="il.co.gabel.android.uhcarmel.ui.MainActivity" />
         </activity>
     </application>
 

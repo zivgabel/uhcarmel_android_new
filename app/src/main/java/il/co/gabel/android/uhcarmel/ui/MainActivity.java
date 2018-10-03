@@ -1,4 +1,4 @@
-package il.co.gabel.android.uhcarmel;
+package il.co.gabel.android.uhcarmel.ui;
 
 import android.Manifest;
 import android.content.Intent;
@@ -28,6 +28,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 
+import il.co.gabel.android.uhcarmel.BuildConfig;
+import il.co.gabel.android.uhcarmel.LocationsActivity;
+import il.co.gabel.android.uhcarmel.NewOrderActivity;
+import il.co.gabel.android.uhcarmel.PocketPDFActivity;
+import il.co.gabel.android.uhcarmel.R;
+import il.co.gabel.android.uhcarmel.ShabatListActivity;
+import il.co.gabel.android.uhcarmel.ShabatRegisterActivity;
 import il.co.gabel.android.uhcarmel.security.UHFireBaseManager;
 import il.co.gabel.android.uhcarmel.security.User;
 
@@ -414,7 +421,7 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
 
     @Override
     public void fireBaseUserSignedIn() {
-        setMenuVisibility();
+        setViewsVisibilty();
     }
 
     @Override

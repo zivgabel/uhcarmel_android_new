@@ -13,6 +13,9 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import il.co.gabel.android.uhcarmel.ui.MainActivity;
+import il.co.gabel.android.uhcarmel.ui.OrderListActivity;
+
 public class OrdersSubscribeService extends FirebaseMessagingService {
     private static final String TAG=OrdersSubscribeService.class.getSimpleName();
     private Intent mSendIntent;

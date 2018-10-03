@@ -19,7 +19,7 @@
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbarStyle="outsideInset"
         android:scrollbars="vertical"
-        tools:context=".MainActivity"
+        tools:context=".ui.MainActivity"
         tools:layout_editor_absoluteY="81dp">
 
         <android.support.constraint.Guideline

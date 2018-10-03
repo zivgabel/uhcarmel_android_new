@@ -9,6 +9,6 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-    tools:context=".OrderListActivity"
+    tools:context=".ui.OrderListActivity"
     tools:listitem="@layout/order_list_row"
     android:layoutDirection="rtl"/>

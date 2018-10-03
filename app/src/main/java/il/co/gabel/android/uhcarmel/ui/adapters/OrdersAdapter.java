@@ -1,4 +1,4 @@
-package il.co.gabel.android.uhcarmel.warehouse;
+package il.co.gabel.android.uhcarmel.ui.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,16 +17,19 @@ import java.util.Iterator;
 import java.util.List;
 
 import il.co.gabel.android.uhcarmel.OrderDetailActivity;
-import il.co.gabel.android.uhcarmel.ui.OrderListActivity;
 import il.co.gabel.android.uhcarmel.R;
+import il.co.gabel.android.uhcarmel.ui.OrderListActivity;
+import il.co.gabel.android.uhcarmel.ui.OrdersActivity;
+import il.co.gabel.android.uhcarmel.warehouse.Order;
+import il.co.gabel.android.uhcarmel.warehouse.OrderListHolder;
 
-public class OrderListAdapter extends RecyclerView.Adapter<OrderListHolder>{
-    private static final String TAG=OrderListAdapter.class.getSimpleName();
+public class OrdersAdapter extends RecyclerView.Adapter<OrderListHolder>{
+    private static final String TAG= OrdersAdapter.class.getSimpleName();
     private static List<Order> oreders = new ArrayList<>();
 
-    private final OrderListActivity mParentActivity;
+    private final OrdersActivity mParentActivity;
 
-    public OrderListAdapter(OrderListActivity parent,List<Order> items) {
+    public OrdersAdapter(OrdersActivity parent, List<Order> items) {
         oreders = items;
         mParentActivity = parent;
     }

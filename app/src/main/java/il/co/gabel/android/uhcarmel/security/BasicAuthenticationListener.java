@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import il.co.gabel.android.uhcarmel.MainActivity;
+import il.co.gabel.android.uhcarmel.ui.MainActivity;
 
 public class BasicAuthenticationListener implements UHFireBaseManager.AuthenticationListener {
     private static final String TAG = BasicAuthenticationListener.class.getSimpleName();
