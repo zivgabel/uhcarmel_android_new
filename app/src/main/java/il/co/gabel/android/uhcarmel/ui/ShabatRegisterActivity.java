@@ -1,4 +1,4 @@
-package il.co.gabel.android.uhcarmel;
+package il.co.gabel.android.uhcarmel.ui;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,7 +19,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
-import il.co.gabel.android.uhcarmel.Shabat.Shabat;
+import il.co.gabel.android.uhcarmel.R;
+import il.co.gabel.android.uhcarmel.Utils;
+import il.co.gabel.android.uhcarmel.firebase.objects.shabat.Shabat;
 import il.co.gabel.android.uhcarmel.security.User;
 
 public class ShabatRegisterActivity extends AppCompatActivity {

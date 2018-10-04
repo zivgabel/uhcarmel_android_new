@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:isScrollContainer="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".NewOrderActivity"
+    tools:context=".ui.NewOrderActivity"
     android:layoutDirection="rtl">
 
     <android.support.v7.widget.RecyclerView

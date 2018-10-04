@@ -1,4 +1,4 @@
-package il.co.gabel.android.uhcarmel;
+package il.co.gabel.android.uhcarmel.ui.fragment;
 
 import android.app.DialogFragment;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package il.co.gabel.android.uhcarmel.warehouse;
+package il.co.gabel.android.uhcarmel.ui.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -11,11 +11,15 @@ import android.widget.Filterable;
 import android.widget.NumberPicker;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import il.co.gabel.android.uhcarmel.R;
+import il.co.gabel.android.uhcarmel.firebase.objects.warehouse.Item;
+import il.co.gabel.android.uhcarmel.ui.holders.ItemHolder;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemHolder> implements Filterable {
     private final List<Item> items;
@@ -31,6 +35,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemHolder> implements Fil
 
     public void addItem(Item item){
         items.add(item);
+        Collections.sort(items,new ItemComparator());
         notifyDataSetChanged();
     }
 
@@ -105,8 +110,18 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemHolder> implements Fil
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 itemsFiltered = (ArrayList<Item>) results.values;
+                Collections.sort(items,new ItemComparator());
                 notifyDataSetChanged();
             }
         };
+    }
+
+    private class ItemComparator implements Comparator<Item> {
+
+        @Override
+        public int compare(Item i1, Item i2) {
+
+            return i1.getOrder().compareTo(i2.getOrder());
+        }
     }
 }

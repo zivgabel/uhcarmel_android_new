@@ -15,6 +15,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import il.co.gabel.android.uhcarmel.ui.MainActivity;
 import il.co.gabel.android.uhcarmel.ui.OrderListActivity;
+import il.co.gabel.android.uhcarmel.ui.OrdersActivity;
 
 public class OrdersSubscribeService extends FirebaseMessagingService {
     private static final String TAG=OrdersSubscribeService.class.getSimpleName();
@@ -29,9 +30,12 @@ public class OrdersSubscribeService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.e(TAG, "From: " + remoteMessage.getFrom());
+        String uuid=Utils.getUserUID(getApplicationContext());
         if(remoteMessage.getFrom().endsWith(getApplicationContext().getString(R.string.new_order_topic))){
             mSendIntent = new Intent(this, OrderListActivity.class);
             mChannelId ="newOrders";
+        } else if(uuid!=null && remoteMessage.getFrom().endsWith(uuid)){
+            mSendIntent = new Intent(this, OrdersActivity.class);
         } else {
             mSendIntent = new Intent(this, MainActivity.class);
         }

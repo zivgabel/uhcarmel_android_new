@@ -1,4 +1,4 @@
-package il.co.gabel.android.uhcarmel;
+package il.co.gabel.android.uhcarmel.ui;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -22,8 +22,10 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import il.co.gabel.android.uhcarmel.locations.Location;
-import il.co.gabel.android.uhcarmel.locations.LocationsAdapter;
+import il.co.gabel.android.uhcarmel.R;
+import il.co.gabel.android.uhcarmel.Utils;
+import il.co.gabel.android.uhcarmel.firebase.objects.locations.Location;
+import il.co.gabel.android.uhcarmel.ui.adapters.LocationsAdapter;
 
 public class LocationsActivity extends AppCompatActivity {
     private static final String TAG = LocationsActivity.class.getSimpleName();

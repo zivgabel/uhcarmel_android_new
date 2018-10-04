@@ -1,4 +1,4 @@
-package il.co.gabel.android.uhcarmel.Shabat;
+package il.co.gabel.android.uhcarmel.firebase.objects.shabat;
 
 public class Shabat {
     private String uuid;

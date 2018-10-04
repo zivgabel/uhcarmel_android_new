@@ -139,7 +139,7 @@
             android:elevation="4dp"
             android:shadowColor="@android:color/darker_gray"
             android:stateListAnimator="@animator/button_elevation"
-            android:text="@string/button_new_order_label"
+            android:text="@string/button_orders_label"
             app:layout_constraintEnd_toStartOf="@+id/guideline3"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"

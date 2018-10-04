@@ -8,6 +8,7 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ui.OrdersActivity"
-    tools:listitem="@layout/order_list_row"
+    tools:listitem="@layout/orders_row"
     android:layoutDirection="rtl"/>

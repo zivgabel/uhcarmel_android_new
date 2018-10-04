@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package il.co.gabel.android.uhcarmel;
+package il.co.gabel.android.uhcarmel.ui.fragment;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -35,6 +35,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import il.co.gabel.android.uhcarmel.R;
 
 /**
  * This fragment has a big {@ImageView} that shows PDF pages, and 2

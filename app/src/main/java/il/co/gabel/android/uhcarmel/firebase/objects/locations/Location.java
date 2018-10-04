@@ -1,4 +1,4 @@
-package il.co.gabel.android.uhcarmel.locations;
+package il.co.gabel.android.uhcarmel.firebase.objects.locations;
 
 public class Location {
 

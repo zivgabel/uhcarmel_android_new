@@ -19,8 +19,10 @@ import java.util.List;
 
 import il.co.gabel.android.uhcarmel.R;
 import il.co.gabel.android.uhcarmel.Utils;
-import il.co.gabel.android.uhcarmel.warehouse.Order;
-import il.co.gabel.android.uhcarmel.warehouse.OrderListAdapter;
+import il.co.gabel.android.uhcarmel.firebase.objects.warehouse.Order;
+import il.co.gabel.android.uhcarmel.security.BasicAuthenticationListener;
+import il.co.gabel.android.uhcarmel.security.UHFireBaseManager;
+import il.co.gabel.android.uhcarmel.ui.adapters.OrderListAdapter;
 
 public class OrderListActivity extends AppCompatActivity {
     private static final String TAG=OrderListActivity.class.getSimpleName();
@@ -29,6 +31,7 @@ public class OrderListActivity extends AppCompatActivity {
     private OrderListAdapter mAdapter;
     private DatabaseReference mDatabaseReference;
     private ChildEventListener mListener;
+    private UHFireBaseManager manager;
 
 
     @Override
@@ -43,7 +46,7 @@ public class OrderListActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
+        manager = new UHFireBaseManager(OrderListActivity.this,new BasicAuthenticationListener(OrderListActivity.this));
         mRecyclerView = findViewById(R.id.order_list);
         setupRecyclerView(mRecyclerView);
         attachListener();
@@ -67,19 +70,23 @@ public class OrderListActivity extends AppCompatActivity {
     }
 
     private void attachListener(){
-        mDatabaseReference = Utils.getFBDBReference(getApplicationContext()).child("warehouse").child("orders");
+        mDatabaseReference = Utils.getFBDBReference(getApplicationContext()).child("orders");
         if(mListener ==null){
             mListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     Order order = dataSnapshot.getValue(Order.class);
+                    Log.e(TAG, "onChildAdded: New order: "+dataSnapshot.getKey() );
                     order.setFb_key(dataSnapshot.getKey());
                     mAdapter.addItem(order);
                 }
 
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
+                    Order order = dataSnapshot.getValue(Order.class);
+                    Log.e(TAG, "onChildChanged: Changed order: "+dataSnapshot.getKey() );
+                    order.setFb_key(dataSnapshot.getKey());
+                    mAdapter.addItem(order);
                 }
 
                 @Override

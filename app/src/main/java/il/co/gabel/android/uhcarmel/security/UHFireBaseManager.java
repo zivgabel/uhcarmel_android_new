@@ -77,11 +77,11 @@ public class UHFireBaseManager {
     }
 
     public void addItemsEventListener(ChildEventListener listener){
-        rootDatabaseReference.child("items").addChildEventListener(listener);
+        rootDatabaseReference.child("warehouse").child("items2").addChildEventListener(listener);
         testOrdersListener();
     }
     public void removeItemsEventListener(ChildEventListener listener){
-        rootDatabaseReference.child("items").removeEventListener(listener);
+        rootDatabaseReference.child("warehouse").child("items2").removeEventListener(listener);
     }
 
 

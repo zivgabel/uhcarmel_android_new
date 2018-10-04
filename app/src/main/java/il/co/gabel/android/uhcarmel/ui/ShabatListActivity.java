@@ -1,4 +1,4 @@
-package il.co.gabel.android.uhcarmel;
+package il.co.gabel.android.uhcarmel.ui;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,8 +22,10 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
-import il.co.gabel.android.uhcarmel.Shabat.Shabat;
-import il.co.gabel.android.uhcarmel.Shabat.ShabatListAdapter;
+import il.co.gabel.android.uhcarmel.R;
+import il.co.gabel.android.uhcarmel.Utils;
+import il.co.gabel.android.uhcarmel.firebase.objects.shabat.Shabat;
+import il.co.gabel.android.uhcarmel.ui.adapters.ShabatListAdapter;
 
 public class ShabatListActivity extends AppCompatActivity {
     private static final String TAG=ShabatListActivity.class.getSimpleName();

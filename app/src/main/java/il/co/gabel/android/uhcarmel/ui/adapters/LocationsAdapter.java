@@ -1,4 +1,4 @@
-package il.co.gabel.android.uhcarmel.locations;
+package il.co.gabel.android.uhcarmel.ui.adapters;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import il.co.gabel.android.uhcarmel.R;
+import il.co.gabel.android.uhcarmel.firebase.objects.locations.Location;
+import il.co.gabel.android.uhcarmel.ui.holders.LocationHolder;
 
 public class LocationsAdapter extends RecyclerView.Adapter<LocationHolder>  implements Filterable{
     private List<Location> locations;

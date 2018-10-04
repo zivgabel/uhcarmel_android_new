@@ -1,4 +1,4 @@
-package il.co.gabel.android.uhcarmel.warehouse;
+package il.co.gabel.android.uhcarmel.firebase.objects.warehouse;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -6,13 +6,17 @@ import java.util.Map;
 
 public class Order {
 
+    public static final String ORDER_STATUS_NEW = "new";
+    public static final String ORDER_STATUS_READY = "ready";
+    public static final String ORDER_STATUS_COMPLETED = "completed";
+
     private Map<String,Integer> items=new HashMap<>();
     private int mirs;
     private Date order_date;
     private String branch;
-    private Boolean ready = false;
     private String fb_key;
     private String userFirebaseId;
+    private String status;
 
     public Order(){}
 
@@ -64,20 +68,20 @@ public class Order {
         this.branch = branch;
     }
 
-    public Boolean getReady() {
-        return ready;
-    }
-
-    public void setReady(Boolean ready) {
-        this.ready = ready;
-    }
-
     public String getUserFirebaseId() {
         return userFirebaseId;
     }
 
     public void setUserFirebaseId(String userFirebaseId) {
         this.userFirebaseId = userFirebaseId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override

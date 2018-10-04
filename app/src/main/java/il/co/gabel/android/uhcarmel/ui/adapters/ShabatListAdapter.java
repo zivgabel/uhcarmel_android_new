@@ -1,4 +1,4 @@
-package il.co.gabel.android.uhcarmel.Shabat;
+package il.co.gabel.android.uhcarmel.ui.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +13,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import il.co.gabel.android.uhcarmel.R;
+import il.co.gabel.android.uhcarmel.firebase.objects.shabat.Shabat;
+import il.co.gabel.android.uhcarmel.ui.holders.ShabatListHolder;
 
 public class ShabatListAdapter extends RecyclerView.Adapter<ShabatListHolder>{
     private static final String TAG = ShabatListAdapter.class.getSimpleName();

@@ -1,4 +1,4 @@
-package il.co.gabel.android.uhcarmel;
+package il.co.gabel.android.uhcarmel.ui;
 
 import android.app.DialogFragment;
 import android.app.FragmentManager;
@@ -17,10 +17,12 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.Map;
 
-import il.co.gabel.android.uhcarmel.ui.OrderListActivity;
-import il.co.gabel.android.uhcarmel.warehouse.ConfirmOrderDeleteDialogFragment;
-import il.co.gabel.android.uhcarmel.warehouse.Order;
-import il.co.gabel.android.uhcarmel.warehouse.OrderListAdapter;
+import il.co.gabel.android.uhcarmel.R;
+import il.co.gabel.android.uhcarmel.Utils;
+import il.co.gabel.android.uhcarmel.firebase.objects.warehouse.Order;
+import il.co.gabel.android.uhcarmel.ui.adapters.OrderListAdapter;
+import il.co.gabel.android.uhcarmel.ui.fragment.ConfirmOrderAcceptedDialogFragment;
+import il.co.gabel.android.uhcarmel.ui.fragment.ConfirmOrderReadyDialogFragment;
 
 
 /**
@@ -29,11 +31,13 @@ import il.co.gabel.android.uhcarmel.warehouse.OrderListAdapter;
  * item details are presented side-by-side with a list of items
  * in a {@link OrderListActivity}.
  */
-public class OrderDetailActivity extends AppCompatActivity implements ConfirmOrderDeleteDialogFragment.NoticeDialogListener{
+public class OrderDetailActivity extends AppCompatActivity implements ConfirmOrderAcceptedDialogFragment.NoticeDialogListener{
     public static final String ARG_ITEM_ID = "item_id";
     private Order order;
     private static final String TAG=OrderDetailActivity.class.getCanonicalName();
-    private ConfirmOrderDeleteDialogFragment confirmOrderDeleteDialogFragment;
+    private ConfirmOrderAcceptedDialogFragment confirmOrderAcceptedDialogFragment;
+    private ConfirmOrderReadyDialogFragment confirmOrderReadyDialogFragment;
+    private Boolean mIsOwnOrders=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +45,11 @@ public class OrderDetailActivity extends AppCompatActivity implements ConfirmOrd
         setContentView(R.layout.activity_order_detail);
         Toolbar toolbar = findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.order_detail_fab);
         String item_id= getIntent().getStringExtra(OrderDetailActivity.ARG_ITEM_ID);
         if(item_id!=null) {
             Log.e(TAG, "onCreate: item_id: "+item_id );
-            order=OrderListAdapter.getOrder(item_id);
+            order = OrderListAdapter.getOrder(item_id);
         }
         if(order!=null){
             TextView orderDetail = findViewById(R.id.order_detail);
@@ -61,14 +65,30 @@ public class OrderDetailActivity extends AppCompatActivity implements ConfirmOrd
             onBackPressed();
         }
 
+        if(order.getStatus().equals(Order.ORDER_STATUS_COMPLETED)){
+            fab.setVisibility(View.GONE);
+        }
+        if(order.getStatus().equals(Order.ORDER_STATUS_READY)){
+            fab.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_delete));
+        }
+        if(order.getStatus().equals(Order.ORDER_STATUS_NEW)){
+            fab.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_online));
+        }
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(order!=null){
-                    confirmOrderDeleteDialogFragment = new ConfirmOrderDeleteDialogFragment();
-                    FragmentManager fragmentManager = getFragmentManager();
-                    confirmOrderDeleteDialogFragment.show(fragmentManager,"DeleteOrderDialogFragment");
+                    if(order.getStatus().equals(Order.ORDER_STATUS_READY)) {
+                        confirmOrderAcceptedDialogFragment = new ConfirmOrderAcceptedDialogFragment();
+                        FragmentManager fragmentManager = getFragmentManager();
+                        confirmOrderAcceptedDialogFragment.show(fragmentManager, "DeleteOrderDialogFragment");
+                    } else {
+                        confirmOrderReadyDialogFragment = new ConfirmOrderReadyDialogFragment();
+                        FragmentManager fragmentManager = getFragmentManager();
+                        confirmOrderReadyDialogFragment.show(fragmentManager, "ReadyOrderDialogFragment");
+                    }
                 }
             }
         });
@@ -99,20 +119,32 @@ public class OrderDetailActivity extends AppCompatActivity implements ConfirmOrd
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        DatabaseReference reference = Utils.getFBDBReference(getApplicationContext()).child("warehouse").child("orders");
-        DatabaseReference completed_reference = Utils.getFBDBReference(getApplicationContext()).child("warehouse").child("completed_orders");
-        reference.child(order.getFb_key()).removeValue();
-        completed_reference.push().setValue(order);
-        String prefix=getString(R.string.new_order_user_topic_prefix);
-        String mirs = String.valueOf(order.getMirs());
-        String msg = getString(R.string.new_order_deleted_notification_body);
-        Utils.sendNotification(prefix+mirs,msg);
-        confirmOrderDeleteDialogFragment.dismiss();
+        DatabaseReference reference = Utils.getFBDBReference(getApplicationContext()).child("orders");
+        if(order.getStatus().equals(Order.ORDER_STATUS_READY)){
+            order.setStatus(Order.ORDER_STATUS_COMPLETED);
+        } else {
+            order.setStatus(Order.ORDER_STATUS_READY);
+        }
+        reference.child(order.getFb_key()).setValue(order);
+        if(order.getStatus().equals(Order.ORDER_STATUS_READY)) {
+            String prefix = getString(R.string.new_order_user_topic_prefix);
+            String mirs = String.valueOf(order.getMirs());
+            String msg = getString(R.string.new_order_deleted_notification_body);
+            Utils.sendNotification(prefix + mirs, msg);
+            confirmOrderReadyDialogFragment.dismiss();
+        } else {
+            confirmOrderAcceptedDialogFragment.dismiss();
+        }
+
         onBackPressed();
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
-        confirmOrderDeleteDialogFragment.dismiss();
+        if(order.getStatus().equals(Order.ORDER_STATUS_READY)) {
+            confirmOrderAcceptedDialogFragment.dismiss();
+        } else {
+            confirmOrderReadyDialogFragment.dismiss();
+        }
     }
 }

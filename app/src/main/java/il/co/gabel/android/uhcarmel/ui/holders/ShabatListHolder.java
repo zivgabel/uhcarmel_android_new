@@ -1,4 +1,4 @@
-package il.co.gabel.android.uhcarmel.Shabat;
+package il.co.gabel.android.uhcarmel.ui.holders;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

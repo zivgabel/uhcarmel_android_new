@@ -1,16 +1,14 @@
-package il.co.gabel.android.uhcarmel;
+package il.co.gabel.android.uhcarmel.ui;
 
 import android.app.DialogFragment;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -28,12 +26,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
+import il.co.gabel.android.uhcarmel.R;
+import il.co.gabel.android.uhcarmel.Utils;
+import il.co.gabel.android.uhcarmel.firebase.objects.warehouse.Item;
+import il.co.gabel.android.uhcarmel.firebase.objects.warehouse.Order;
 import il.co.gabel.android.uhcarmel.security.BasicAuthenticationListener;
 import il.co.gabel.android.uhcarmel.security.UHFireBaseManager;
-import il.co.gabel.android.uhcarmel.warehouse.ConfirmOrderSendDialogFragment;
-import il.co.gabel.android.uhcarmel.warehouse.Item;
-import il.co.gabel.android.uhcarmel.warehouse.ItemAdapter;
-import il.co.gabel.android.uhcarmel.warehouse.Order;
+import il.co.gabel.android.uhcarmel.ui.adapters.ItemAdapter;
+import il.co.gabel.android.uhcarmel.ui.fragment.ConfirmOrderSendDialogFragment;
 
 public class NewOrderActivity extends AppCompatActivity implements ConfirmOrderSendDialogFragment.NoticeDialogListener{
 
@@ -56,8 +56,6 @@ public class NewOrderActivity extends AppCompatActivity implements ConfirmOrderS
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        DividerItemDecoration decoration = new DividerItemDecoration(mRecyclerView.getContext(),LinearLayoutManager.VERTICAL);
-        mRecyclerView.addItemDecoration(decoration);
         attachListeners();
         FloatingActionButton fab = findViewById(R.id.new_order_fab);
         Toolbar toolbar = findViewById(R.id.new_order_toolbar);
@@ -164,6 +162,7 @@ public class NewOrderActivity extends AppCompatActivity implements ConfirmOrderS
         Date date = new Date();
         Order order = new Order(mAdapter.getOrdered_items(),user_mirs,date,branch);
         order.setUserFirebaseId(Utils.getUserUID(NewOrderActivity.this));
+        order.setStatus(Order.ORDER_STATUS_NEW);
         DatabaseReference reference = Utils.getFBDBReference(getApplicationContext()).child("orders");
         reference.push().setValue(order);
         mAdapter.getOrdered_items().clear();

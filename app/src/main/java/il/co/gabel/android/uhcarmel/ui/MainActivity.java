@@ -29,12 +29,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 
 import il.co.gabel.android.uhcarmel.BuildConfig;
-import il.co.gabel.android.uhcarmel.LocationsActivity;
-import il.co.gabel.android.uhcarmel.NewOrderActivity;
-import il.co.gabel.android.uhcarmel.PocketPDFActivity;
 import il.co.gabel.android.uhcarmel.R;
-import il.co.gabel.android.uhcarmel.ShabatListActivity;
-import il.co.gabel.android.uhcarmel.ShabatRegisterActivity;
 import il.co.gabel.android.uhcarmel.security.UHFireBaseManager;
 import il.co.gabel.android.uhcarmel.security.User;
 
@@ -50,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
     private Button mButtonLocations;
     private Button mButtonEmsPocket;
     private Button mButtonShabatRegister;
-    private Button mButtonNewOrder;
+    private Button mButtonOrders;
     private Button mButtonWarehouseAdmin;
     private Button mButtonShabatAdmin;
     private Button mButtonReportCase;
@@ -156,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
         setMenuVisibility();
         if(user==null){
             mButtonShabatAdmin.setVisibility(View.GONE);
-            mButtonNewOrder.setVisibility(View.GONE);
+            mButtonOrders.setVisibility(View.GONE);
             mButtonShabatRegister.setVisibility(View.GONE);
             mButtonWarehouseAdmin.setVisibility(View.GONE);
             mButtonReportCase.setVisibility(View.GONE);
@@ -164,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
             return;
         }
         mButtonReportCase.setVisibility(View.VISIBLE);
-        mButtonNewOrder.setVisibility(View.VISIBLE);
+        mButtonOrders.setVisibility(View.VISIBLE);
         mButtonShabatRegister.setVisibility(View.VISIBLE);
         mButtonEmsPocket.setVisibility(View.VISIBLE);
         if(user.getPermissions().getWarehouse()){
@@ -189,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
         mButtonLocations = findViewById(R.id.button_locations);
         mButtonEmsPocket = findViewById(R.id.button_ems_pocket);
         mButtonShabatRegister = findViewById(R.id.button_shabat_register);
-        mButtonNewOrder = findViewById(R.id.button_new_order);
+        mButtonOrders = findViewById(R.id.button_new_order);
         mButtonWarehouseAdmin = findViewById(R.id.button_warehouse_admin);
         mButtonShabatAdmin = findViewById(R.id.button_shabat_admin);
         mButtonLocations.setOnClickListener(new View.OnClickListener() {
@@ -198,10 +193,10 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
                 createIntent(LocationsActivity.class);
             }
         });
-        mButtonNewOrder.setOnClickListener(new View.OnClickListener() {
+        mButtonOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createIntent(NewOrderActivity.class);
+                createIntent(OrdersActivity.class);
             }
         });
         mButtonShabatRegister.setOnClickListener(new View.OnClickListener() {
@@ -382,7 +377,7 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
                     public void onComplete(@NonNull Task<Location> task) {
                         if (task.isSuccessful() && task.getResult() != null) {
                             mLastLocation = task.getResult();
-                            final il.co.gabel.android.uhcarmel.locations.Location location = new il.co.gabel.android.uhcarmel.locations.Location(getString(R.string.my_location),mLastLocation.getAltitude(),mLastLocation.getLongitude());
+                            final il.co.gabel.android.uhcarmel.firebase.objects.locations.Location location = new il.co.gabel.android.uhcarmel.firebase.objects.locations.Location(getString(R.string.my_location),mLastLocation.getAltitude(),mLastLocation.getLongitude());
                             showSnackbar(R.string.location_found, R.string.send_location_question, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {

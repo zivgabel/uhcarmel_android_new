@@ -1,11 +1,10 @@
-package il.co.gabel.android.uhcarmel.warehouse;
+package il.co.gabel.android.uhcarmel.ui.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import il.co.gabel.android.uhcarmel.BaseDialogFragment;
 import il.co.gabel.android.uhcarmel.R;
 
 public class ConfirmOrderSendDialogFragment  extends BaseDialogFragment {

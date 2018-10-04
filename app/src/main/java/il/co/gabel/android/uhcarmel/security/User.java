@@ -8,8 +8,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import il.co.gabel.android.uhcarmel.R;
-import il.co.gabel.android.uhcarmel.Shabat.Shabat;
 import il.co.gabel.android.uhcarmel.Utils;
+import il.co.gabel.android.uhcarmel.firebase.objects.shabat.Shabat;
 
 public class User {
     private int mirs;

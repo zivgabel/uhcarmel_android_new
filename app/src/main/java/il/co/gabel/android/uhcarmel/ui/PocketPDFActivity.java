@@ -1,4 +1,4 @@
-package il.co.gabel.android.uhcarmel;
+package il.co.gabel.android.uhcarmel.ui;
 
 
 import android.os.Bundle;
@@ -6,6 +6,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+
+import il.co.gabel.android.uhcarmel.R;
+import il.co.gabel.android.uhcarmel.ui.fragment.PdfRendererBasicFragment;
 
 public class PocketPDFActivity extends AppCompatActivity {
 
