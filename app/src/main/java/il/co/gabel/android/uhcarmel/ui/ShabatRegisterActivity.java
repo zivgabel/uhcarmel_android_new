@@ -22,6 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import il.co.gabel.android.uhcarmel.R;
 import il.co.gabel.android.uhcarmel.Utils;
 import il.co.gabel.android.uhcarmel.firebase.objects.shabat.Shabat;
+import il.co.gabel.android.uhcarmel.security.BasicAuthenticationListener;
+import il.co.gabel.android.uhcarmel.security.UHFireBaseManager;
 import il.co.gabel.android.uhcarmel.security.User;
 
 public class ShabatRegisterActivity extends AppCompatActivity {
@@ -37,6 +39,9 @@ public class ShabatRegisterActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabaseReference;
     private ChildEventListener mChildEventListener;
+    private User user;
+
+
     private static  final  String TAG = ShabatRegisterActivity.class.getSimpleName();
     private String uuid;
 
@@ -62,11 +67,7 @@ public class ShabatRegisterActivity extends AppCompatActivity {
         mSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mShabatSpinner.setAdapter(mSpinnerAdapter);
 
-        User user = Utils.currentUser(getApplicationContext());
-        Log.e(TAG, "shabat onCreate: USER: fn: "+user.getFirst_name()+" ln: "+user.getLast_name() );
-        mShabatFirstName.setText(user.getFirst_name());
-        mShabatLastName.setText(user.getLast_name());
-        mShabatMirs.setText(String.valueOf(user.getMirs()));
+
 
         mDatabaseReference=Utils.getFBDBReference(getApplicationContext()).child("shabat");
         attachListener();
@@ -77,17 +78,22 @@ public class ShabatRegisterActivity extends AppCompatActivity {
                 setViews(isChecked);
             }
         });
+        user = UHFireBaseManager.getUser();
+        Log.e(TAG, "shabat onCreate: USER: fn: "+user.getFirstName()+" ln: "+user.getLastName() );
+        mShabatFirstName.setText(user.getFirstName());
+        mShabatLastName.setText(user.getLastName());
+        mShabatMirs.setText(String.valueOf(user.getMirs()));
+
     }
 
     private void updateSettings(){
         Log.e(TAG, "updateSettings: UPDATING!!!" );
-        User user = Utils.currentUser(getApplicationContext());
         Shabat shabat = new Shabat(
                 mShabatSwitch.isChecked(),
                 mShabatAddress.getText().toString(),
                 mShabatSpinner.getSelectedItem().toString(),
                 mShabatComment.getText().toString(),
-                user.getFirst_name()+" "+user.getLast_name(),
+                user.getFirstName()+" "+user.getLastName(),
                 user.getMirs(),
                 uuid
         );
@@ -170,4 +176,5 @@ public class ShabatRegisterActivity extends AppCompatActivity {
         mShabatAddress.setEnabled(state);
         mShabatComment.setEnabled(state);
     }
+
 }

@@ -29,12 +29,12 @@ public class UHFireBaseManager {
     private final AuthenticationListener authenticationListener;
     private static FirebaseAuth firebaseAuth;
     private static FirebaseAuth.AuthStateListener authStateListener;
+    private static User user;
     private Context context;
     private DatabaseReference rootDatabaseReference;
     private DatabaseReference databaseReference;
     private ChildEventListener childEventListener;
     private ChildEventListener itemsChildEventListener;
-    private User user;
 
 
 
@@ -222,7 +222,7 @@ public class UHFireBaseManager {
         removeUserData();
     }
 
-    public User getUser(){
+    public static User getUser(){
         return user;
     }
 

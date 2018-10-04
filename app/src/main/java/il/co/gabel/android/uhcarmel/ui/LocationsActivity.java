@@ -48,8 +48,6 @@ public class LocationsActivity extends AppCompatActivity {
         List<Location> locations = new ArrayList<>();
         mAdapter = new LocationsAdapter(locations);
         mRecyclerView.setAdapter(mAdapter);
-        DividerItemDecoration decoration = new DividerItemDecoration(mRecyclerView.getContext(),LinearLayoutManager.VERTICAL);
-        mRecyclerView.addItemDecoration(decoration);
 
         DatabaseReference databaseReference = Utils.getFBDBReference(getApplicationContext()).child("places");
         ChildEventListener listener = new ChildEventListener() {

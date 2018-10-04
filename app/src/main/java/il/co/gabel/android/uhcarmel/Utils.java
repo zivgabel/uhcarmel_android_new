@@ -3,6 +3,7 @@ package il.co.gabel.android.uhcarmel;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
@@ -82,6 +83,11 @@ public class Utils {
 
 
     public static void sendNotification(String topic,String notifBody){
+        sendNotification(topic,notifBody,null);
+    }
+
+
+    public static void sendNotification(String topic, String notifBody, @Nullable String title){
         String postUrl="https://fcm.googleapis.com/fcm/send";
         JSONObject object = new JSONObject();
         JSONObject object1 = new JSONObject();
@@ -89,6 +95,9 @@ public class Utils {
             object.put("to","/topics/"+topic);
             object.put("collapse_key",  "type_a");
             object1.put("body",notifBody);
+            if(title!=null) {
+                object1.put("title", title);
+            }
             object.put("notification",object1);
         } catch (JSONException e) {
             e.printStackTrace();

@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
         }
     }
     private void setViewsVisibilty(){
-        User user = authenticationManager.getUser();
+        User user = UHFireBaseManager.getUser();
         Log.e(TAG, "setViewsVisibilty: User: "+user );
         setMenuVisibility();
         if(user==null){

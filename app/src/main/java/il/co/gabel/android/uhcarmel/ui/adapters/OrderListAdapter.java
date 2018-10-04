@@ -111,6 +111,17 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListHolder>{
         return null;
     }
 
+    public static int getOrderPosition(String fb_key){
+        int count=0;
+        for (Order o : orders) {
+            if (o.getFb_key().equals(fb_key)) {
+                return count;
+            }
+            count++;
+        }
+        return -1;
+    }
+
 
     public void removeItem(Order order) {
 
