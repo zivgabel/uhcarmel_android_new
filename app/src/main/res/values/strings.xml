@@ -85,4 +85,6 @@
     <string name="red_alert_folder">production/redalert/</string>
     <string name="ra_email_himt">כתובת אימייל</string>
     <string name="ra_content_lablel">תוכן ההודעה</string>
+    <string name="title_activity_red_alert_list">RedAlertListActivity</string>
+    <string name="ral_dispaly_name_cd">שם השולח</string>
 </resources>

@@ -50,14 +50,6 @@ public class UploadMessageAsyncTask extends AsyncTask<String,Void,List<Uri>> {
 
     }
 
-    @Override
-    protected void onPostExecute(List<Uri> uris) {
-        super.onPostExecute(uris);
-        message.setImages(uris);
-        message.setLocation(mLastLocation);
-        listener.uploadCompleted(message);
-
-    }
 
     @SuppressLint("MissingPermission")
     @Override

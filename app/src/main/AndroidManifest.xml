@@ -121,6 +121,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="il.co.gabel.android.uhcarmel.ui.MainActivity" />
         </activity>
+        <activity android:name=".ui.RedAlertListActivity"></activity>
     </application>
 
 </manifest>

@@ -38,4 +38,15 @@ public class CompleteRedAlertMessage {
     public void setImages(List<ImageInfo> images) {
         this.images = images;
     }
+
+    public int getNumberOfPictures(){
+        if(images==null){
+            return 0;
+        }
+        return images.size();
+    }
+    public Boolean hasLocation(){
+        return (location!=null);
+    }
+
 }

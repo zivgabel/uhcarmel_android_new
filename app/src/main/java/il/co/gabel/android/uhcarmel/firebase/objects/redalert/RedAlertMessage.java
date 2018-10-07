@@ -3,16 +3,16 @@ package il.co.gabel.android.uhcarmel.firebase.objects.redalert;
 import android.location.Location;
 import android.net.Uri;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class RedAlertMessage {
     private String firstName;
     private String lastName;
     private String content;
-    private List<Uri> images;
     private Date date;
-    private Location location;
 
     public RedAlertMessage(){}
 
@@ -21,8 +21,6 @@ public class RedAlertMessage {
         this.lastName=lastName;
         this.content=content;
         this.date=new Date();
-        this.location=location;
-        this.images=images;
     }
 
     public String getFirstName() {
@@ -49,27 +47,19 @@ public class RedAlertMessage {
         this.content = content;
     }
 
-    public List<Uri> getImages() {
-        return images;
-    }
-
-    public void setImages(List<Uri> images) {
-        this.images = images;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
     public Date getDate() {
         return date;
     }
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getReporterDisplayName(){
+        return firstName+" "+lastName;
+    }
+    public String getFormatedDate(){
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        return format.format(date);
     }
 }

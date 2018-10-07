@@ -46,7 +46,7 @@ import il.co.gabel.android.uhcarmel.firebase.objects.redalert.RedAlertMessage;
 import il.co.gabel.android.uhcarmel.security.UHFireBaseManager;
 import il.co.gabel.android.uhcarmel.ui.adapters.RedAlertImagesAdapter;
 
-public class RedAlertActivity extends AppCompatActivity implements UploadMessageAsyncTask.UploadListener {
+public class RedAlertActivity extends AppCompatActivity  {
     private static final String TAG = RedAlertImagesAdapter.class.getSimpleName();
     private Button mImagePickerButton;
     private static final int PICK_IMAGE_MULTIPLE = 1;
@@ -269,18 +269,4 @@ public class RedAlertActivity extends AppCompatActivity implements UploadMessage
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public void uploadCompleted(RedAlertMessage message) {
-        DatabaseReference redAlertReference = Utils.getFBDBReference(this).child("redalert");
-        redAlertReference.push().setValue(message).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Log.e(TAG, "onComplete: success");
-                } else {
-                    Log.e(TAG, "onComplete: "+task.getException().getMessage() );
-                }
-            }
-        });
-    }
 }
