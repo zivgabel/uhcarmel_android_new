@@ -112,6 +112,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="il.co.gabel.android.uhcarmel.ui.OrdersActivity" />
         </activity>
+        <activity
+            android:name=".ui.RedAlertActivity"
+            android:label="@string/title_activity_red_alert"
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="il.co.gabel.android.uhcarmel.ui.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

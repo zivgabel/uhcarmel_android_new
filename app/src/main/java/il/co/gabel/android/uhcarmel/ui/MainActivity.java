@@ -8,18 +8,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.widget.Button;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -37,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
 
     private static final String TAG=MainActivity.class.getSimpleName();
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
-    private static final int RC_SIGN_IN = 1;
     private static final String CASE_REPORT_URL = "https://www.tfaforms.com/4645989";
 
     private Button mButtonCall1221;
@@ -49,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
     private Button mButtonWarehouseAdmin;
     private Button mButtonShabatAdmin;
     private Button mButtonReportCase;
+    private FloatingActionButton mRedAlertFab;
 
 
     private UHFireBaseManager authenticationManager;
@@ -66,15 +64,20 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
         authenticationManager = new UHFireBaseManager(MainActivity.this,this);
         authenticationManager.getUserDetails();
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        setWebview();
         requestPermissions();
+        mRedAlertFab = findViewById(R.id.red_alert_fab);
+        mRedAlertFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createIntent(RedAlertActivity.class);
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         authenticationManager.getUserDetails();
-        setWebview();
     }
 
     @Override
@@ -83,15 +86,6 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
         authenticationManager.removeFireBaseUserListener();
     }
 
-    private void setWebview(){
-        WebView webView = findViewById(R.id.facebook_webview);
-        webView.setVerticalScrollBarEnabled(true);
-        String html ="<html><body><iframe src=\"https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FIcodHazala%2F&tabs=timeline&width=340&height=500&small_header=true&adapt_container_width=true&hide_cover=true&show_facepile=true&appId=1925799054173754\" width=\"340\" height=\"500\" style=\"border:none;overflow:hidden\" scrolling=\"no\" frameborder=\"0\" allowTransparency=\"true\" allow=\"encrypted-media\"></iframe></body></html>";
-        String encodedHtml = Base64.encodeToString(html.getBytes(),Base64.NO_PADDING);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        webView.loadData(encodedHtml,"text/html", "base64");
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -178,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
 
 
     private void setButtons(){
+        mRedAlertFab = findViewById(R.id.red_alert_fab);
         mButtonReportCase = findViewById(R.id.button_report_case);
         mButtonCall1221 = findViewById(R.id.button_call_1221);
         mButtonSendMyLocation = findViewById(R.id.button_send_my_location);

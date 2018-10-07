@@ -3,5 +3,6 @@
     <string name="FIREBASE_DATABASE_PREFIX">devel-new</string>
     <string name="new_order_topic">devel-new-orders-new-</string>
     <string name="new_order_user_topic_prefix">orders-devel-new-</string>
+    <string name="red_alert_folder">devel/redalert/</string>
 
 </resources>

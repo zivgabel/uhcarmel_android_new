@@ -8,6 +8,10 @@ public class Location {
 
     public Location(){}
 
+    public Location(Double altitude, Double longitude) {
+        this.altitude = altitude;
+        this.longitude = longitude;
+    }
 
     public String getWazeUrl(){
         return "https://waze.com/ul?ll="+ String.valueOf(altitude) + "," + String.valueOf(longitude);

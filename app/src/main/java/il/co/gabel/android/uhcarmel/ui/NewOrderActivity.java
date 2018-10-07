@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.SearchView;
@@ -169,7 +168,7 @@ public class NewOrderActivity extends AppCompatActivity implements ConfirmOrderS
         order.setFb_key(tmp.getKey());
         tmp.setValue(order);
         mAdapter.getOrdered_items().clear();
-        Utils.sendNotification(order.getBranchAlias()+getApplicationContext().getString(R.string.new_order_topic),getApplicationContext().getString(R.string.new_order_notification_body_start)+" "+user_mirs,tmp.getKey());
+        Utils.sendNotification(order.getBranchAlias()+getApplicationContext().getString(R.string.new_order_topic),getApplicationContext().getString(R.string.new_order_notification_body_start)+" "+user_mirs);
         dialog.dismiss();
         Toast.makeText(getApplicationContext(),getString(R.string.order_success),Toast.LENGTH_LONG).show();
         branches.recycle();

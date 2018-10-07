@@ -74,4 +74,15 @@
     <string name="title_activity_orders">הזמנות</string>
     <string name="title_activity_own_order_detail">תיאור הזמנה</string>
     <string name="dialog_confirm_order_ready">לסמן את ההזמנה כמוכנה ?</string>
+    <string name="title_activity_red_alert">האימייל האדום</string>
+    <string name="first_name_label">שם פרטי</string>
+    <string name="last_name_label">שם משפחה</string>
+    <string name="ra_add_picture_button_label">הוסף תמונה</string>
+    <string name="ra_menu_send">שלח</string>
+    <string name="ra_fn_required">שם פרטי נדרש</string>
+    <string name="ra_ln_required">שם משפחה נדרש</string>
+    <string name="ra_content_required">תוכן נדרש</string>
+    <string name="red_alert_folder">production/redalert/</string>
+    <string name="ra_email_himt">כתובת אימייל</string>
+    <string name="ra_content_lablel">תוכן ההודעה</string>
 </resources>

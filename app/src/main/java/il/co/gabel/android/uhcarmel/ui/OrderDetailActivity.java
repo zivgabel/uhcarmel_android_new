@@ -130,7 +130,7 @@ public class OrderDetailActivity extends AppCompatActivity implements ConfirmOrd
             String prefix = getString(R.string.new_order_user_topic_prefix);
             String mirs = String.valueOf(order.getMirs());
             String msg = getString(R.string.new_order_deleted_notification_body);
-            Utils.sendNotification(prefix + mirs, msg,order.getFb_key());
+            Utils.sendNotification(prefix + mirs, msg);
             confirmOrderReadyDialogFragment.dismiss();
         } else {
             confirmOrderAcceptedDialogFragment.dismiss();

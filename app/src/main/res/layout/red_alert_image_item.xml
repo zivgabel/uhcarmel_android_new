@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp">
+
+    <ImageButton
+        android:id="@+id/ra_image_delete"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:elevation="10dp"
+        android:src="@android:drawable/ic_delete" />
+    <ImageView
+        android:id="@+id/ra_image_view"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@android:drawable/ic_dialog_email"
+        />
+</FrameLayout>
