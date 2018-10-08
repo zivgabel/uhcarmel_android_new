@@ -1,4 +1,6 @@
-package il.co.gabel.android.uhcarmel.firebase.objects;
+package il.co.gabel.android.uhcarmel.firebase.objects.redalert;
+
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -6,10 +8,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 import il.co.gabel.android.uhcarmel.firebase.objects.locations.Location;
-import il.co.gabel.android.uhcarmel.firebase.objects.redalert.ImageInfo;
-import il.co.gabel.android.uhcarmel.firebase.objects.redalert.RedAlertMessage;
 
 public class CompleteRedAlertMessage {
+    private static final String TAG = CompleteRedAlertMessage.class.getSimpleName();
     private RedAlertMessage message;
     private Location location;
     private HashMap<String,ImageInfo> images;
@@ -34,13 +35,13 @@ public class CompleteRedAlertMessage {
         this.location = location;
     }
 
-//    public HashMap<String, ImageInfo> getImages() {
-//        return images;
-//    }
-//
-//    public void setImages(HashMap<String, ImageInfo> images) {
-//        this.images = images;
-//    }
+    public HashMap<String, ImageInfo> getImages() {
+        return images;
+    }
+
+    public void setImages(HashMap<String, ImageInfo> images) {
+        this.images = images;
+    }
 
     public int getNumberOfPictures(){
         if(images==null){
@@ -49,7 +50,14 @@ public class CompleteRedAlertMessage {
         return images.size();
     }
     public Boolean hasLocation(){
-        return (location!=null);
+        Log.e(TAG, "hasLocation: "+(location!=null) );
+        try {
+            Double alt = location.getAltitude();
+            Log.e(TAG, "hasLocation: Altitude: "+alt );
+            return true;
+        } catch (NullPointerException e) {
+            return false;
+        }
     }
 
     @Override

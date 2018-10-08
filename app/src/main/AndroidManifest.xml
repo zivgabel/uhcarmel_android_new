@@ -130,6 +130,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="il.co.gabel.android.uhcarmel.ui.MainActivity" />
         </activity>
+        <activity
+            android:name=".ui.RedAlertDetailsActivity"
+            android:label="@string/title_activity_red_alert_details"
+            android:parentActivityName=".ui.RedAlertListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="il.co.gabel.android.uhcarmel.ui.RedAlertListActivity" />
+        </activity>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA5kqXmJvujWc0KVotBp2759zBFU3TFpWw"/>
     </application>
 
 </manifest>

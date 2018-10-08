@@ -35,6 +35,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -135,6 +136,7 @@ public class RedAlertActivity extends AppCompatActivity  {
             message.setFirstName(mFirstNameEditText.getText().toString());
             message.setLastName(mLastNameEditText.getText().toString());
             message.setContent(mContentTextView.getText().toString());
+            message.setDate(new Date());
             final DatabaseReference redAlertReference = Utils.getFBDBReference(this).child("redalert");
             final String messagekey = redAlertReference.push().getKey();
             redAlertReference.child(messagekey).child("message").setValue(message);
@@ -195,7 +197,7 @@ public class RedAlertActivity extends AppCompatActivity  {
                     mLastLocation = null;
                 }
                 if(mLastLocation!=null) {
-                    final DatabaseReference locationRef = Utils.getFBDBReference(getApplicationContext()).child("redalert").child(messageKey).child("locations");
+                    final DatabaseReference locationRef = Utils.getFBDBReference(getApplicationContext()).child("redalert").child(messageKey).child("location");
                     locationRef.setValue(new il.co.gabel.android.uhcarmel.firebase.objects.locations.Location(mLastLocation.getAltitude(),mLastLocation.getLongitude()));
                 }
             }

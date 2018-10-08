@@ -20,5 +20,6 @@ public class RedAlertListHolder extends BasicHolder {
         dateTextView = itemView.findViewById(R.id.ral_date_text_view);
         picsNumberTextView = itemView.findViewById(R.id.ral_pics_number_text_view);
         locationCheckbox = itemView.findViewById(R.id.ral_location_checkbox);
+        locationCheckbox.setEnabled(false);
     }
 }

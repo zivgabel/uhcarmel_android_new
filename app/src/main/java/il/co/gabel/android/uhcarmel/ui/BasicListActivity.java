@@ -28,8 +28,7 @@ public abstract class BasicListActivity<H extends BasicHolder, I extends Object>
 
 
     protected void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-        adapter.addItemUnique(((I)dataSnapshot.getValue()));
-
+        adapter.addItemUnique(dataSnapshot.getValue(adapter.getItemType()));
     }
 
     protected void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -37,7 +36,7 @@ public abstract class BasicListActivity<H extends BasicHolder, I extends Object>
     }
 
     protected void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-        adapter.removeItem((I)dataSnapshot.getValue());
+        adapter.removeItem(dataSnapshot.getValue(adapter.getItemType()));
     }
 
     protected void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -58,9 +57,7 @@ public abstract class BasicListActivity<H extends BasicHolder, I extends Object>
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     Log.e(TAG, "onChildAdded: "+dataSnapshot.getKey());
-                    Log.e(TAG, "onChildAdded: " + ((I)dataSnapshot.getValue()).toString() );
-
-                    BasicListActivity.this.onChildAdded(dataSnapshot,s);
+            BasicListActivity.this.onChildAdded(dataSnapshot,s);
                 }
 
                 @Override
@@ -113,7 +110,6 @@ public abstract class BasicListActivity<H extends BasicHolder, I extends Object>
         recyclerView.setAdapter(adapter);
         attachListener();
         super.onResume();
-        attachListener();
     }
 
     @Override

@@ -6,9 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DataSnapshot;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 import il.co.gabel.android.uhcarmel.ui.holders.BasicHolder;
@@ -16,14 +19,17 @@ import il.co.gabel.android.uhcarmel.ui.holders.BasicHolder;
 public abstract class BasicAdapter<I extends Object, H extends BasicHolder> extends RecyclerView.Adapter<H> {
     protected List<I> items;
     protected Class<H> holderType;
-    protected Comparator<I> comparator;
+    protected Class<I> itemType;
 
 
     abstract int getItemLayoutId();
 
-    public BasicAdapter(List<I> items,Class<H> holderType) {
+
+
+    public BasicAdapter(List<I> items,Class<H> holderType, Class<I> itemType) {
         this.items=items;
         this.holderType=holderType;
+        this.itemType=itemType;
     }
 
     /**
@@ -70,6 +76,7 @@ public abstract class BasicAdapter<I extends Object, H extends BasicHolder> exte
     public H onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(getItemLayoutId(), parent, false);
         try {
+
             return holderType.getConstructor(View.class).newInstance(view);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -89,10 +96,13 @@ public abstract class BasicAdapter<I extends Object, H extends BasicHolder> exte
     }
 
     class ItemComperator implements Comparator<I> {
-
         @Override
         public int compare(I o1, I o2) {
             return o1.toString().compareTo(o2.toString());
         }
+    }
+
+    public Class<I> getItemType() {
+        return itemType;
     }
 }

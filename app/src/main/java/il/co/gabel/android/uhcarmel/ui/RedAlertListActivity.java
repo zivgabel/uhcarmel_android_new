@@ -6,7 +6,7 @@ import android.support.v7.widget.Toolbar;
 import java.util.ArrayList;
 
 import il.co.gabel.android.uhcarmel.R;
-import il.co.gabel.android.uhcarmel.firebase.objects.CompleteRedAlertMessage;
+import il.co.gabel.android.uhcarmel.firebase.objects.redalert.CompleteRedAlertMessage;
 import il.co.gabel.android.uhcarmel.ui.adapters.BasicAdapter;
 import il.co.gabel.android.uhcarmel.ui.adapters.RedAlertListAdapter;
 import il.co.gabel.android.uhcarmel.ui.holders.RedAlertListHolder;
@@ -25,7 +25,7 @@ public class RedAlertListActivity extends BasicListActivity<RedAlertListHolder,C
 
     @Override
     BasicAdapter getAdapter() {
-        return new RedAlertListAdapter(new ArrayList<CompleteRedAlertMessage>(),RedAlertListHolder.class);
+        return new RedAlertListAdapter(new ArrayList<CompleteRedAlertMessage>(),RedAlertListHolder.class,CompleteRedAlertMessage.class);
     }
 
     @Override
@@ -35,7 +35,6 @@ public class RedAlertListActivity extends BasicListActivity<RedAlertListHolder,C
         Toolbar toolbar = findViewById(R.id.ral_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
 
