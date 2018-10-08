@@ -87,4 +87,5 @@
     <string name="ra_content_lablel">תוכן ההודעה</string>
     <string name="title_activity_red_alert_list">RedAlertListActivity</string>
     <string name="ral_dispaly_name_cd">שם השולח</string>
+    <string name="button_manage_redalert">ניהול אימייל אדום</string>
 </resources>

@@ -47,11 +47,12 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
     private Button mButtonShabatAdmin;
     private Button mButtonReportCase;
     private FloatingActionButton mRedAlertFab;
-
+    private Button mButtonRedAlertAdmin;
 
     private UHFireBaseManager authenticationManager;
     private FusedLocationProviderClient mFusedLocationClient;
     private Location mLastLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
         mButtonOrders = findViewById(R.id.button_new_order);
         mButtonWarehouseAdmin = findViewById(R.id.button_warehouse_admin);
         mButtonShabatAdmin = findViewById(R.id.button_shabat_admin);
+        mButtonRedAlertAdmin = findViewById(R.id.button_red_alert_admin);
         mButtonLocations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -216,6 +218,12 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
             @Override
             public void onClick(View v) {
                 createIntent(PocketPDFActivity.class);
+            }
+        });
+        mButtonRedAlertAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createIntent(RedAlertListActivity.class);
             }
         });
         mButtonSendMyLocation.setOnClickListener(new View.OnClickListener() {

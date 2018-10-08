@@ -180,6 +180,18 @@
             app:layout_constraintStart_toEndOf="@+id/guideline3"
             app:layout_constraintTop_toBottomOf="@+id/button_shabat_register" />
 
+        <Button
+            android:id="@+id/button_red_alert_admin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/secondaryColor"
+            android:text="@string/button_manage_redalert"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_warehouse_admin" />
 
 
     </android.support.constraint.ConstraintLayout>

@@ -1,13 +1,12 @@
 package il.co.gabel.android.uhcarmel.ui.holders;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import il.co.gabel.android.uhcarmel.R;
 
-public class RedAlertListHolder extends RecyclerView.ViewHolder {
+public class RedAlertListHolder extends BasicHolder {
 
     public TextView displayNameTextView;
     public TextView dateTextView;
