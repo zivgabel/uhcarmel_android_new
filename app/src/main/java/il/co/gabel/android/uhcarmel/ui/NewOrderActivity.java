@@ -115,6 +115,7 @@ public class NewOrderActivity extends AppCompatActivity implements ConfirmOrderS
 
                 }
             };
+
             fireBaseManager.addItemsEventListener(mListener);
         }
 

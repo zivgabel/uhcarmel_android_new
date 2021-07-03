@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.UUID;
 
 import il.co.gabel.android.uhcarmel.R;
-import il.co.gabel.android.uhcarmel.UploadMessageAsyncTask;
 import il.co.gabel.android.uhcarmel.Utils;
 import il.co.gabel.android.uhcarmel.firebase.objects.redalert.ImageInfo;
 import il.co.gabel.android.uhcarmel.firebase.objects.redalert.RedAlertMessage;
@@ -69,7 +68,7 @@ public class RedAlertActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_red_alert);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.ra_toolbar);
+        Toolbar toolbar = findViewById(R.id.ra_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -87,7 +86,7 @@ public class RedAlertActivity extends AppCompatActivity  {
             }
         });
 
-        mImagesRecyclerView = findViewById(R.id.ra_images_recyclerview);
+        mImagesRecyclerView = findViewById(R.id.rad_images_recyclerview);
         mRedAlertImagesAdapter = new RedAlertImagesAdapter();
         mImagesRecyclerView.setAdapter(mRedAlertImagesAdapter);
 

@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -25,6 +26,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
 import il.co.gabel.android.uhcarmel.BuildConfig;
 import il.co.gabel.android.uhcarmel.R;
@@ -33,9 +37,9 @@ import il.co.gabel.android.uhcarmel.security.User;
 
 public class MainActivity extends AppCompatActivity implements UHFireBaseManager.AuthenticationListener {
 
-    private static final String TAG=MainActivity.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
-    private static final String CASE_REPORT_URL = "https://www.tfaforms.com/4645989";
+
 
     private Button mButtonCall1221;
     private Button mButtonSendMyLocation;
@@ -49,10 +53,11 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
     private FloatingActionButton mRedAlertFab;
     private Button mButtonRedAlertAdmin;
 
-    private UHFireBaseManager authenticationManager;
+    private UHFireBaseManager fireBaseManager;
     private FusedLocationProviderClient mFusedLocationClient;
     private Location mLastLocation;
-
+    private ChildEventListener mGeneralListener;
+    private String CASE_REPORT_URL = "https://motid-1221.formtitan.com/Medical_journal";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +66,11 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FirebaseApp.initializeApp(this);
-        setButtons();
-        authenticationManager = new UHFireBaseManager(MainActivity.this,this);
-        authenticationManager.getUserDetails();
+        fireBaseManager = new UHFireBaseManager(MainActivity.this, this);
+        fireBaseManager.getUserDetails();
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        setGeneralListener();
+        setButtons();
         requestPermissions();
         mRedAlertFab = findViewById(R.id.red_alert_fab);
         mRedAlertFab.setOnClickListener(new View.OnClickListener() {
@@ -73,18 +79,21 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
                 createIntent(RedAlertActivity.class);
             }
         });
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        authenticationManager.getUserDetails();
+        fireBaseManager.getUserDetails();
+        setGeneralListener();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        authenticationManager.removeFireBaseUserListener();
+        fireBaseManager.removeFireBaseUserListener();
+        fireBaseManager.removeGeneralConfigListener(mGeneralListener);
     }
 
 
@@ -95,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
         inflater.inflate(R.menu.main_menu, menu);
         MenuItem signin = menu.findItem(R.id.signin);
         MenuItem signout = menu.findItem(R.id.signout);
-        if(authenticationManager.isFireBaseUserExists()){
+        if (fireBaseManager.isFireBaseUserExists()) {
             signin.setVisible(false);
             signout.setVisible(true);
         } else {
@@ -110,25 +119,25 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.signin:
-                authenticationManager.authenticate();
+                fireBaseManager.authenticate();
                 return true;
             case R.id.signout:
-                authenticationManager.signout();
+                fireBaseManager.signout();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void setMenuVisibility(){
+    private void setMenuVisibility() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         Menu menu = toolbar.getMenu();
-        if(menu!=null){
-            Log.e(TAG, "setViewsVisibilty: menu is available" );
+        if (menu != null) {
+            Log.e(TAG, "setViewsVisibilty: menu is available");
             MenuItem signin = menu.findItem(R.id.signin);
             MenuItem signout = menu.findItem(R.id.signout);
-            if(signin!=null && signout!=null) {
-                if (authenticationManager.isFireBaseUserExists()) {
+            if (signin != null && signout != null) {
+                if (fireBaseManager.isFireBaseUserExists()) {
                     signin.setVisible(false);
                     signout.setVisible(true);
                 } else {
@@ -137,14 +146,15 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
                 }
             }
         } else {
-            Log.e(TAG, "setViewsVisibilty: menu is not available" );
+            Log.e(TAG, "setViewsVisibilty: menu is not available");
         }
     }
-    private void setViewsVisibilty(){
+
+    private void setViewsVisibilty() {
         User user = UHFireBaseManager.getUser();
-        Log.e(TAG, "setViewsVisibilty: User: "+user );
+        Log.e(TAG, "setViewsVisibilty: User: " + user);
         setMenuVisibility();
-        if(user==null){
+        if (user == null) {
             mButtonShabatAdmin.setVisibility(View.GONE);
             mButtonOrders.setVisibility(View.GONE);
             mButtonShabatRegister.setVisibility(View.GONE);
@@ -157,12 +167,12 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
         mButtonOrders.setVisibility(View.VISIBLE);
         mButtonShabatRegister.setVisibility(View.VISIBLE);
         mButtonEmsPocket.setVisibility(View.VISIBLE);
-        if(user.getPermissions().getWarehouse()){
+        if (user.getPermissions().getWarehouse()) {
             mButtonWarehouseAdmin.setVisibility(View.VISIBLE);
         } else {
             mButtonWarehouseAdmin.setVisibility(View.GONE);
         }
-        if(user.getPermissions().getShabat()){
+        if (user.getPermissions().getShabat()) {
             mButtonShabatAdmin.setVisibility(View.VISIBLE);
         } else {
             mButtonShabatAdmin.setVisibility(View.GONE);
@@ -172,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
     }
 
 
-    private void setButtons(){
+    private void setButtons() {
         mRedAlertFab = findViewById(R.id.red_alert_fab);
         mButtonReportCase = findViewById(R.id.button_report_case);
         mButtonCall1221 = findViewById(R.id.button_call_1221);
@@ -252,8 +262,8 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
 
     }
 
-    private void createIntent(Class className){
-        Intent intent = new Intent(MainActivity.this,className);
+    private void createIntent(Class className) {
+        Intent intent = new Intent(MainActivity.this, className);
         startActivity(intent);
     }
 
@@ -262,6 +272,7 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
                 new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                 REQUEST_PERMISSIONS_REQUEST_CODE);
     }
+
     private boolean checkPermissions() {
         int permissionState = ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -295,6 +306,7 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
             startLocationPermissionRequest();
         }
     }
+
     /**
      * Shows a {@link Snackbar} using {@code text}.
      *
@@ -337,39 +349,38 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
                 Log.i(TAG, "User interaction was cancelled.");
             } else //noinspection StatementWithEmptyBody
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted.
-                //getLastLocation();
-            } else {
-                // Permission denied.
+                    // Permission granted.
+                    //getLastLocation();
+                } else {
+                    // Permission denied.
 
-                // Notify the user via a SnackBar that they have rejected a core permission for the
-                // app, which makes the Activity useless. In a real app, core permissions would
-                // typically be best requested during a welcome-screen flow.
+                    // Notify the user via a SnackBar that they have rejected a core permission for the
+                    // app, which makes the Activity useless. In a real app, core permissions would
+                    // typically be best requested during a welcome-screen flow.
 
-                // Additionally, it is important to remember that a permission might have been
-                // rejected without asking the user for permission (device policy or "Never ask
-                // again" prompts). Therefore, a user interface affordance is typically implemented
-                // when permissions are denied. Otherwise, your app could appear unresponsive to
-                // touches or interactions which have required permissions.
-                showSnackbar(R.string.permission_denied_explanation, R.string.settings,
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                // Build intent that displays the App settings screen.
-                                Intent intent = new Intent();
-                                intent.setAction(
-                                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                Uri uri = Uri.fromParts("package",
-                                        BuildConfig.APPLICATION_ID, null);
-                                intent.setData(uri);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            }
-                        });
-            }
+                    // Additionally, it is important to remember that a permission might have been
+                    // rejected without asking the user for permission (device policy or "Never ask
+                    // again" prompts). Therefore, a user interface affordance is typically implemented
+                    // when permissions are denied. Otherwise, your app could appear unresponsive to
+                    // touches or interactions which have required permissions.
+                    showSnackbar(R.string.permission_denied_explanation, R.string.settings,
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    // Build intent that displays the App settings screen.
+                                    Intent intent = new Intent();
+                                    intent.setAction(
+                                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    Uri uri = Uri.fromParts("package",
+                                            BuildConfig.APPLICATION_ID, null);
+                                    intent.setData(uri);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                }
+                            });
+                }
         }
     }
-
 
 
     @SuppressWarnings("MissingPermission")
@@ -380,16 +391,16 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
                     public void onComplete(@NonNull Task<Location> task) {
                         if (task.isSuccessful() && task.getResult() != null) {
                             mLastLocation = task.getResult();
-                            final il.co.gabel.android.uhcarmel.firebase.objects.locations.Location location = new il.co.gabel.android.uhcarmel.firebase.objects.locations.Location(getString(R.string.my_location),mLastLocation.getAltitude(),mLastLocation.getLongitude());
+                            final il.co.gabel.android.uhcarmel.firebase.objects.locations.Location location = new il.co.gabel.android.uhcarmel.firebase.objects.locations.Location(getString(R.string.my_location), mLastLocation.getAltitude(), mLastLocation.getLongitude());
                             showSnackbar(R.string.location_found, R.string.send_location_question, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    String message = location.getName()+"\r\n"+location.getWazeUrl();
+                                    String message = location.getName() + "\r\n" + location.getWazeUrl();
                                     Intent intent = new Intent();
                                     intent.setAction(Intent.ACTION_SEND);
-                                    intent.putExtra(Intent.EXTRA_TEXT,message);
+                                    intent.putExtra(Intent.EXTRA_TEXT, message);
                                     intent.setType("text/plain");
-                                    if(intent.resolveActivity(v.getContext().getPackageManager())!=null) {
+                                    if (intent.resolveActivity(v.getContext().getPackageManager()) != null) {
                                         v.getContext().startActivity(intent);
                                     }
                                 }
@@ -400,6 +411,52 @@ public class MainActivity extends AppCompatActivity implements UHFireBaseManager
                         }
                     }
                 });
+    }
+
+    private void setGeneralListener() {
+
+        if (mGeneralListener == null) {
+            mGeneralListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    Log.e(TAG, "Child Added");
+                    doAction(dataSnapshot.getKey(), dataSnapshot.getValue());
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    Log.e(TAG, "Child Changed");
+                    doAction(dataSnapshot.getKey(), dataSnapshot.getValue());
+
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                    Log.e(TAG, "Child Removed");
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    Log.e(TAG, "Child Moved");
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e(TAG, "Child Cancelled");
+                    Log.e(TAG, databaseError.getMessage());
+                }
+
+                private void doAction(String key, Object value) {
+                    switch (key) {
+                        case "cases_form":
+                            CASE_REPORT_URL = value.toString();
+                            setButtons();
+                            break;
+                    }
+                }
+            };
+        }
+        fireBaseManager.addGeneralConfigListener(mGeneralListener);
     }
 
     @Override

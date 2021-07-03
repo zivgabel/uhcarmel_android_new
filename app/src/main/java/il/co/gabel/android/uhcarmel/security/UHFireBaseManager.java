@@ -36,8 +36,6 @@ public class UHFireBaseManager {
     private ChildEventListener childEventListener;
     private ChildEventListener itemsChildEventListener;
 
-
-
     public interface AuthenticationListener{
         void userAdded();
         void userRemoved();
@@ -76,25 +74,35 @@ public class UHFireBaseManager {
         });
     }
 
-    public void addItemsEventListener(ChildEventListener listener){
+    public void addItemsEventListener(ChildEventListener listener) {
         rootDatabaseReference.child("warehouse").child("items2").addChildEventListener(listener);
         testOrdersListener();
     }
-    public void removeItemsEventListener(ChildEventListener listener){
+
+    public void removeItemsEventListener(ChildEventListener listener) {
         rootDatabaseReference.child("warehouse").child("items2").removeEventListener(listener);
     }
 
+    public void addGeneralConfigListener(ChildEventListener listener) {
+        Log.e(TAG, "addGeneralConfigListener");
+        rootDatabaseReference.child("general").addChildEventListener(listener);
+    }
 
-    public UHFireBaseManager(final Context context, AuthenticationListener listener){
-        this.context=context;
-        authenticationListener=listener;
-        if(firebaseAuth==null) {
+    public void removeGeneralConfigListener(ChildEventListener listener) {
+        Log.e(TAG, "addGeneralConfigListener");
+        rootDatabaseReference.child("general").removeEventListener(listener);
+    }
+
+    public UHFireBaseManager(final Context context, AuthenticationListener listener) {
+        this.context = context;
+        authenticationListener = listener;
+        if (firebaseAuth == null) {
             firebaseAuth = FirebaseAuth.getInstance();
         }
-        if(rootDatabaseReference==null){
+        if (rootDatabaseReference == null) {
             rootDatabaseReference = Utils.getFBDBReference(context);
         }
-        if(authStateListener==null) {
+        if (authStateListener == null) {
             authStateListener = new FirebaseAuth.AuthStateListener() {
                 SharedPreferences.Editor editor = Utils.getSharedPreferencesEditor(context);
 
